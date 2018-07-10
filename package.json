@@ -1,0 +1,22 @@
+{
+  "name": "vsts-packer-tasks",
+  "version": "0.0.1",
+  "description": "Packer Tasks for VSTS",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "packer",
+    "vsts"
+  ],
+  "author": "Manuel Riezebosch",
+  "license": "ISC",
+  "dependencies": {
+    "vsts-task-tool-lib": "^0.9.0"
+  },
+  "devDependencies": {
+    "typescript": "^2.9.2"
+  }
+}
