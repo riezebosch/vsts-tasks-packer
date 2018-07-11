@@ -1,0 +1,5 @@
+**/*
+!src/**.js
+!src/**.d.ts
+!package.json
+!README.md

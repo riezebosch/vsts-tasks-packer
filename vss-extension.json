@@ -24,6 +24,23 @@
             "path": "PackerTool"
         }
     ],
+    "content": {
+        "details": {
+            "path": "README.md"
+        }
+    },
+    "links": {
+        "getstarted": {
+            "uri": "https://www.fabrikam-fiber-inc.com/help/getstarted"
+        },
+        "support": {
+            "uri": "https://www.fabrikam-fiber-inc.com/support"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/fabrikam-fiber-inc/myextension"
+    },
     "contributions": [
         {
             "id": "packer",
