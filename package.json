@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "build": "tsc -p .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "npm run build",
+    "test": "mocha --recursive"
   },
   "keywords": [
     "packer",
@@ -17,6 +18,9 @@
     "vsts-task-tool-lib": "^0.9.0"
   },
   "devDependencies": {
+    "@types/mocha": "^5.2.4",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
     "typescript": "^2.9.2"
   }
 }

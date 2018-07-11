@@ -1,43 +1,35 @@
 {
-    "id": "31C75BBB-BCDF-4706-8D7C-4DA6A1959BC2",
-    "name": "NodeTool",
-    "friendlyName": "Node Tool Installer",
-    "description": "Finds or Downloads and caches specified version spec of Node and adds it to the PATH.",
-    "helpMarkDown": "",
+    "id": "b6ddafd8-587a-4e47-94f7-3102ed47dad8",
+    "name": "PackerTool",
+    "friendlyName": "Packer Tool Installer",
+    "description": "Finds or Downloads and caches specified version spec of Packer and adds it to the PATH.",
+    "helpMarkDown": "[More information](https://packer.io)",
     "category": "Tool",
     "runsOn": [
         "Agent",
         "DeploymentGroup"
     ],
-    "author": "Microsoft Corporation",
+    "author": "Manuel Riezebosch",
     "version": {
         "Major": 0,
-        "Minor": 136,
+        "Minor": 142,
         "Patch": 0
     },
-    "satisfies": ["Node"],
+    "satisfies": ["Packer"],
     "demands": [],
-    "instanceNameFormat": "Use Node $(versionSpec)",
+    "instanceNameFormat": "Use Packer $(version)",
     "inputs": [{
-            "name": "versionSpec",
+            "name": "version",
             "type": "string",
-            "label": "Version Spec",
-            "defaultValue": "6.x",
+            "label": "Version",
+            "defaultValue": "1.2.4",
             "required": true,
-            "helpMarkDown": "Version Spec of version to get.  Examples: 6.x, 4.x, 6.10.0, >=6.10.0"
-        },
-        {
-            "name": "checkLatest",
-            "type": "boolean",
-            "label": "Check for Latest Version",
-            "defaultValue": "false",
-            "required": false,
-            "helpMarkDown": "Always checks online for the latest available version that satisfies the version spec. This is typically false unless you have a specific scenario to always get latest. This will cause it to incur download costs when potentially not necessary, especially with the hosted build pool."
+            "helpMarkDown": "Version to get. See [releases](https://releases.hashicorp.com/packer/) for available versions."
         }
     ],
     "execution": {
         "Node": {
-            "target": "nodetool.js",
+            "target": "src/packertool.js",
             "argumentFormat": ""
         }
     },

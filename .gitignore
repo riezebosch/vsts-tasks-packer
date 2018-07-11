@@ -1,3 +1,5 @@
 node_modules/
 *.js
 *.d.ts
+.taskkey
+.DS_Store

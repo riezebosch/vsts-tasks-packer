@@ -1,0 +1,13 @@
+{
+    "typescript.tsdk": "${workspaceRoot}/node_modules/typescript/lib",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/*.js": { "when": "$(basename).ts" },
+        "**/*?.js": { "when": "$(basename).tsx" },
+        "**/*.d.ts": { "when": "$(basename).ts" },
+        "**/*.js.map": true
+    }
+}
