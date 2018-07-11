@@ -1,0 +1,80 @@
+{
+    "id": "b3c6bb07-1292-44e7-9ec9-b211fc98b6d2",
+    "name": "Packer",
+    "friendlyName": "Packer",
+    "description": "Build Automated Machine Images",
+    "helpMarkDown": "[More information](https://packer.io)",
+    "category": "Tool",
+    "runsOn": [
+        "Agent",
+        "DeploymentGroup"
+    ],
+    "author": "Manuel Riezebosch",
+    "version": {
+        "Major": 0,
+        "Minor": 159,
+        "Patch": 0
+    },
+    "satisfies": [],
+    "demands": ["Packer"],
+    "instanceNameFormat": "Packer $(command)",
+    "inputs": [{
+            "name": "ConnectedServiceName",
+            "type": "connectedService:AzureRM",
+            "label": "Azure subscription",
+            "required": true,
+            "helpMarkDown": "Select the Azure Resource Manager subscription for building and storing the machine image."
+        },
+        {
+            "name": "customTemplateLocation",
+            "type": "filePath",
+            "label": "Packer template location",
+            "required": true,
+            "helpMarkDown": "Path to a custom user-provided template."
+        },
+        {
+            "name": "command",
+            "type": "pickList",
+            "label": "Command",
+            "required": true,
+            "helpMarkDown": "Available commands are:\\nbuild       build image(s) from template\\nfix         fixes templates from old versions of packer\\ninspect     see components of a template\\npush        push a template and supporting files to a Packer build service\\nvalidate    check that a template is valid\\nversion     Prints the Packer version",
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "options": {
+                "build": "build", 
+                "fix": "fix",
+                "inspect": "inspect",
+                "push": "push",
+                "validate": "validate", 
+                "version": "version"
+            },
+            "defaultValue": "build"
+        },
+        {
+            "name": "variables",
+            "type": "multiLine",
+            "label": "Variables",
+            "defaultValue": "",
+            "helpMarkDown": "Variable for templates, can be used multiple times.",
+            "required": "false",
+            "properties": {
+                "editorExtension": "ms.vss-services-azure.azure-servicebus-message-grid"
+            }
+        },
+        {
+            "name": "options",
+            "type": "string",
+            "label": "Options",
+            "defaultValue": "",
+            "helpMarkDown": "-color=false               Disable color output (on by default)\\n-debug                     Debug mode enabled for builds\\n-except=foo,bar,baz        Build all builds other than these\\n-only=foo,bar,baz          Build only the specified builds\\n-force                     Force a build to continue if artifacts exist, deletes existing artifacts\\n-machine-readable          Machine-readable output\\n-on-error=[cleanup|abort|ask] If the build fails do: clean up (default), abort, or ask\\n-parallel=false            Disable parallelization (on by default)\\n-var 'key=value'           Variable for templates, can be used multiple times.\\n-var-file=path             JSON file containing user variables.",
+            "required": "false"
+        }
+    ],
+    "execution": {
+        "Node": {
+            "target": "src/packer.js",
+            "argumentFormat": ""
+        }
+    }
+}
