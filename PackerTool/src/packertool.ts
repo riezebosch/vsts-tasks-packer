@@ -50,15 +50,6 @@ async function getNode(version: string) {
     }
 
     //
-    // a tool installer initimately knows details about the layout of that tool
-    // for example, node binary is in the bin folder after the extract on Mac/Linux.
-    // layouts could change by version, by platform etc... but that's the tool installers job
-    //
-    if (osPlat != 'win32') {
-        toolPath = path.join(toolPath, 'bin');
-    }
-
-    //
     // prepend the tools path. instructs the agent to prepend for future tasks
     //
     toolLib.prependPath(toolPath);
