@@ -1,0 +1,39 @@
+{
+    "manifestVersion": 1,
+    "id": "Packer",
+    "name": "Packer",
+    "version": "0.0.1",
+    "publisher": "riezebosch",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],    
+    "description": "Build Automated Machine Images using Packer",
+    "categories": [
+        "Build and release"
+    ],
+    "icons": {
+        "default": "images/extension-icon.png"
+    },
+    "files": [
+        {
+            "path": "Packer"
+        },
+        {
+            "path": "PackerTool"
+        }
+    ],
+    "contributions": [
+        {
+            "id": "packer",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "packer"
+            }
+        }
+    ]
+}

@@ -1,5 +1,6 @@
 node_modules/
 *.js
 *.d.ts
+*.vsix
 .taskkey
 .DS_Store
