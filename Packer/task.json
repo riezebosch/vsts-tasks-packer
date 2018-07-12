@@ -19,14 +19,14 @@
     "demands": ["Packer"],
     "instanceNameFormat": "Packer $(command)",
     "inputs": [{
-            "name": "ConnectedServiceName",
+            "name": "azureSubscription",
             "type": "connectedService:AzureRM",
             "label": "Azure subscription",
             "required": true,
             "helpMarkDown": "Select the Azure Resource Manager subscription for building and storing the machine image."
         },
         {
-            "name": "customTemplateLocation",
+            "name": "templatePath",
             "type": "filePath",
             "label": "Packer template location",
             "required": true,

@@ -6,14 +6,14 @@ async function run(): Promise<any> {
     let variables = JSON.parse(tl.getInput('variables'));
     let options = tl.getInput('options');
 
-    let service = tl.getInput('ConnectedServiceName');
+    let service = tl.getInput('azureSubscription');
     let client_id = tl.getEndpointAuthorizationParameter(service, 'serviceprincipalid', false);
     let client_secret = tl.getEndpointAuthorizationParameter(service, 'serviceprincipalkey', false);
 
     let subscription_id = tl.getEndpointDataParameter(service, "SubscriptionId", true);
     let tenant_id = tl.getEndpointAuthorizationParameter(service, 'tenantid', false);
     
-    let template = tl.getPathInput('customTemplateLocation', true, true);
+    let template = tl.getPathInput('templatePath', true, true);
 
     let packer = tl.tool('packer');
     packer.arg(command);
