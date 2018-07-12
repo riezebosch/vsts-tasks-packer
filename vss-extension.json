@@ -2,8 +2,9 @@
     "manifestVersion": 1,
     "id": "Packer",
     "name": "Packer",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "publisher": "riezebosch",
+    "public": true,
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
@@ -39,17 +40,27 @@
     },
     "repository": {
         "type": "git",
-        "uri": "https://github.com/fabrikam-fiber-inc/myextension"
+        "uri": "https://github.com/riezebosch/vsts-tasks-packer"
     },
     "contributions": [
         {
-            "id": "packer",
+            "id": "Packer",
             "type": "ms.vss-distributed-task.task",
             "targets": [
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
                 "name": "packer"
+            }
+        },
+        {
+            "id": "PackerTool",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "PackerTool"
             }
         }
     ]
