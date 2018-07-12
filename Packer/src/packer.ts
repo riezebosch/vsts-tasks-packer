@@ -9,8 +9,7 @@ async function run(): Promise<any> {
     let service = tl.getInput('ConnectedServiceName');
     let client_id = tl.getEndpointAuthorizationParameter(service, 'serviceprincipalid', false);
     let client_secret = tl.getEndpointAuthorizationParameter(service, 'serviceprincipalkey', false);
-    client_secret = encodeURIComponent(client_secret);
-    
+
     let subscription_id = tl.getEndpointDataParameter(service, "SubscriptionId", true);
     let tenant_id = tl.getEndpointAuthorizationParameter(service, 'tenantid', false);
     
