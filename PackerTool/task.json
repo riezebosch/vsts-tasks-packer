@@ -12,7 +12,7 @@
     "author": "Manuel Riezebosch",
     "version": {
         "Major": 0,
-        "Minor": 143,
+        "Minor": 144,
         "Patch": 0
     },
     "satisfies": ["Packer"],

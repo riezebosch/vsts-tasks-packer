@@ -7,8 +7,7 @@
     "build": "tsc -p .",
     "pretest": "npm run build",
     "test": "mocha --recursive",
-    "prepublishOnly": "npm i && npm run build && rm -rf node_modules && npm i --only=prod",
-    "publish": "tfx build tasks upload --task-path ."
+    "upload": "npm i && npm run build && rm -rf node_modules && npm i --only=prod && tfx build tasks upload --task-path ."
   },
   "keywords": [
     "packer",
