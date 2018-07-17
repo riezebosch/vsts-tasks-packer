@@ -12,7 +12,7 @@
     "author": "Manuel Riezebosch",
     "version": {
         "Major": 0,
-        "Minor": 165,
+        "Minor": 171,
         "Patch": 0
     },
     "satisfies": [],
@@ -37,7 +37,7 @@
             "type": "pickList",
             "label": "Command",
             "required": true,
-            "helpMarkDown": "Available commands are:\n* build: build image(s) from template\n* fix: fixes templates from old versions of packer\n* inspect: see components of a template\n* push: push a template and supporting files to a Packer build service\n* validate: check that a template is valid\n* version: Prints the Packer version",
+            "helpMarkDown": "See [Packer Commands (CLI)](https://www.packer.io/docs/commands/index.html) for more information.",
             "properties": {
                 "EditableOptions": "True"
             },
@@ -52,22 +52,38 @@
             "defaultValue": "build"
         },
         {
+            "name": "force",
+            "type": "boolean",
+            "label": "Force",
+            "defaultValue": false,
+            "helpMarkDown": "Force a build to continue if artifacts exist, deletes existing artifacts",
+            "required": "false",
+            "visibleRule": "command = build"
+        },
+        {
             "name": "variables",
             "type": "multiLine",
             "label": "Variables",
             "defaultValue": "",
-            "helpMarkDown": "Variable for templates, can be used multiple times.",
+            "helpMarkDown": "Variable for templates, can be used multiple times. Place each variable on a newline in the format of `key=value`.",
             "required": "false",
-            "properties": {
-                "editorExtension": "ms.vss-services-azure.azure-servicebus-message-grid"
-            }
+            "visibleRule": "command = build || command = validate"
+        },
+        {
+            "name": "variables-file",
+            "type": "filePath",
+            "label": "Variables file",
+            "defaultValue": "",
+            "helpMarkDown": "JSON file containing user variables.",
+            "required": "false",
+            "visibleRule": "command = build || command = validate"
         },
         {
             "name": "options",
             "type": "string",
             "label": "Options",
             "defaultValue": "",
-            "helpMarkDown": "Build options:\n* -color=false Disable color output (on by default)\n* -debug Debug mode enabled for builds\n* -except=foo,bar,baz Build all builds other than these\n* -only=foo,bar,baz Build only the specified builds\n* -force Force a build to continue if artifacts exist, deletes existing artifacts\n* -machine-readable Machine-readable output\n* -on-error=[cleanup|abort|ask] If the build fails do: clean up (default), abort, or ask\n* -parallel=false Disable parallelization (on by default)\n* -var 'key=value' Variable for templates, can be used multiple times.\n* -var-file=path JSON file containing user variables.\n\nValidate options:\n* -syntax-only: Only check syntax. Do not verify config of the template.\n* -except=foo,bar,baz: Validate all builds other than these\n* -only=foo,bar,baz: Validate only these builds\n* -var 'key=value': Variable for templates, can be used multiple times.\n* -var-file=path: JSON file containing user variables.\n\nFix options:\n* -validate=true: If true (default), validates the fixed template.",
+            "helpMarkDown": "Additional options, see [Packer Commands (CLI)](https://www.packer.io/docs/commands/index.html) for more information.",
             "required": "false"
         }
     ],
