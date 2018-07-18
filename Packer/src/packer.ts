@@ -9,39 +9,35 @@ async function run(): Promise<any> {
     addForce(packer, tl);
     addVariables(packer, tl);
     addVariablesFile(packer, tl);
-    addPackerOptions(packer, tl);
-    addPackerTemplate(packer, tl);
+    addOptions(packer, tl);
+    addTemplate(packer, tl);
 
     await packer.exec();
 }
-function addCommand(packer: ToolRunner, tl: TlWrapper) {
+
+export function addCommand(packer: ToolRunner, tl: InputResolver) {
     packer.arg(tl.getInput('command'));
 }
 
-function addForce(packer: ToolRunner, tl: TlWrapper) {
-    if (tl.getBoolInput('force')) {
-        packer.arg('-force');
-    }
+export function addForce(packer: ToolRunner, tl: InputResolver) {
+    packer.argIf(tl.getBoolInput('force'), '-force');
 }
 
-function addVariables(packer: ToolRunner, tl: TlWrapper) {
+export function addVariables(packer: ToolRunner, tl: InputResolver) {
     tl.getDelimitedInput('variables', '\n', false).forEach(v => {
         packer.arg(['-var', v]);
     });
 }
 
-function addVariablesFile(packer: ToolRunner, tl: TlWrapper) {
-    if (tl.filePathSupplied('variables-file')) {
-        packer.line(`-var-file ${tl.getPathInput('variables-file', false, true)}`);
-    }
+export function addVariablesFile(packer: ToolRunner, tl: PathResolver) {
+    packer.argIf(tl.filePathSupplied('variables-file'), ['-var-file', tl.getPathInput('variables-file', false, true)]);
 }
 
-function addPackerOptions(packer: ToolRunner, tl: TlWrapper) {
-    let options = tl.getInput('options');
-    packer.line(options);
+export function addOptions(packer: ToolRunner, tl: InputResolver) {
+    packer.line(tl.getInput('options'));
 }
 
-function addPackerTemplate(packer: ToolRunner, tl: TlWrapper) {
+export function addTemplate(packer: ToolRunner, tl: PathResolver) {
     let template = tl.getPathInput('templatePath', true, true);
     packer.arg(template);
 }
@@ -52,7 +48,7 @@ export interface InputResolver {
     getDelimitedInput(name: string, delim: string, required?: boolean): string[];
 }
 
-export interface FileInputResolver {
+export interface PathResolver {
     filePathSupplied(name: string): boolean;
     getPathInput(name: string, required?: boolean, check?: boolean): string;
 }
@@ -61,10 +57,7 @@ export interface AzureEndpointParameterResolver {
     getEndpointDataParameter(id: string, key: string, optional: boolean): string;
 }
 
-export interface TlWrapper extends InputResolver, AzureEndpointParameterResolver, FileInputResolver {
-}
-
-export function addAzureVariables(packer: ToolRunner, tl: TlWrapper) {
+export function addAzureVariables(packer: ToolRunner, tl: AzureEndpointParameterResolver & InputResolver) {
     let service = tl.getInput('azureSubscription');
     let client_id = tl.getEndpointAuthorizationParameter(service, 'serviceprincipalid', false);
     packer.arg(['-var', `client_id=${client_id}`]);
