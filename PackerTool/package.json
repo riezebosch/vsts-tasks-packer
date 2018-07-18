@@ -5,9 +5,10 @@
   "main": "src/index.js",
   "scripts": {
     "build": "tsc -p .",
+    "build:prod": "npm i && npm run build && npm prune --production && npm dedupe",
     "pretest": "npm run build",
     "test": "mocha --recursive",
-    "upload": "npm i && npm run build && rm -rf node_modules && npm i --only=prod && tfx build tasks upload --task-path ."
+    "upload": "npm run build:prod && tfx build tasks upload --task-path ."
   },
   "keywords": [
     "packer",

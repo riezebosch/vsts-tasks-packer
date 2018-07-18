@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "Packer",
     "name": "Packer",
-    "version": "0.0.4",
+    "version": "0.1.6",
     "publisher": "riezebosch",
     "public": true,
     "targets": [
@@ -23,6 +23,10 @@
         },
         {
             "path": "PackerTool"
+        },
+        {
+            "path": "screenshots/preview.png",
+            "addressable": true
         }
     ],
     "content": {
