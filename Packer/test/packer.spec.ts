@@ -20,18 +20,22 @@ describe('packer', () => {
     })
 
     it ('should add the subscription id, client_id, client_secret and tenant_id', async () => {
-        let tl = <packer.InputResolver & packer.AzureEndpointParameterResolver>{};
-
         let service = 'my-service';
-        tl.getInput = sandbox.stub().returns(service);
+
+        let input = sandbox.stub();
+        input.withArgs('azureSubscription').returns(service);
 
         let authorization = sandbox.stub();
         authorization.withArgs(service, 'serviceprincipalid', false).returns('asdf');
         authorization.withArgs(service, 'serviceprincipalkey', false).returns('qwer');
         authorization.withArgs(service, 'tenantid', false).returns('qefda');
-        tl.getEndpointAuthorizationParameter = authorization;
         
-        let data = sandbox.stub().returns('subcriptionasdf');
+        let data = sandbox.stub();
+        data.withArgs(service, 'SubscriptionId', false).returns('subcriptionasdf');
+
+        let tl = <packer.InputResolver & packer.AzureEndpointParameterResolver>{};
+        tl.getInput = input;
+        tl.getEndpointAuthorizationParameter = authorization;
         tl.getEndpointDataParameter = data;
 
         packer.addAzureVariables(tool, tl);
@@ -41,15 +45,18 @@ describe('packer', () => {
         await tool.exec();
 
         let output = toOutput(events);
-        expect(output).to.match(/tenant_id=qefda/);
-        expect(output).to.match(/client_id=asdf/);
-        expect(output).to.match(/client_secret=qwer/);
-        expect(output).to.match(/subscription_id=subcriptionasdf/);      
+        expect(output).to.match(/-var tenant_id=qefda/);
+        expect(output).to.match(/-var client_id=asdf/);
+        expect(output).to.match(/-var client_secret=qwer/);
+        expect(output).to.match(/-var subscription_id=subcriptionasdf/);      
     });
 
     it ('should add force when enabled', async () => {
+        let stub = sandbox.stub();
+        stub.withArgs("force").returns(true);
+
         let tl = <packer.InputResolver>{};
-        tl.getBoolInput = sandbox.stub().withArgs("force").returns(true);
+        tl.getBoolInput = stub;
         
         packer.addForce(tool, tl);
         await tool.exec();
@@ -58,8 +65,12 @@ describe('packer', () => {
     });
 
     it ('should not add force when disabled', async () => {
+        let stub = sandbox.stub();
+        stub.withArgs("force").returns(false);
+
         let tl = <packer.InputResolver>{};
-        tl.getBoolInput = sandbox.stub().withArgs("force").returns(false);
+        tl.getBoolInput = stub;
+
         packer.addForce(tool, tl);
         await tool.exec();
 
@@ -67,9 +78,15 @@ describe('packer', () => {
     });
 
     it ('should add variables file when specified', async () => {
+        let supplied = sandbox.stub();
+        supplied.withArgs('variables-file').returns(true);
+
+        let path = sandbox.stub();
+        path.withArgs('variables-file', false, true).returns('asdf.json');
+
         let tl = <packer.PathResolver>{};
-        tl.filePathSupplied = sandbox.stub().returns(true);
-        tl.getPathInput = sandbox.stub().returns('asdf.json');
+        tl.filePathSupplied = supplied;
+        tl.getPathInput = path;
         
         packer.addVariablesFile(tool, tl);
         await tool.exec();
@@ -89,9 +106,12 @@ describe('packer', () => {
     });
 
     it ('should add options', async () => {
-        let tl = <packer.InputResolver>{};
-        tl.getInput = sandbox.stub().withArgs('options').returns('--color=false');
+        let stub = sandbox.stub();
+        stub.withArgs('options').returns('--color=false');
         
+        let tl = <packer.InputResolver>{};
+        tl.getInput = stub;
+
         packer.addOptions(tool, tl);
         await tool.exec();
 
@@ -99,19 +119,26 @@ describe('packer', () => {
     });
 
     it ('should add template', async () => {
+        let stub = sandbox.stub();
+        stub.withArgs('templatePath', true, true).returns('my-custom-packer-template.json');
+
         let tl = <packer.PathResolver>{};
-        tl.getPathInput = sandbox.stub().withArgs('template').returns('my-custom-packer-template.json');
-        
+        tl.getPathInput = stub;
+
         packer.addTemplate(tool, tl);
         await tool.exec();
 
+        sinon.assert.called(stub);
         expect(toOutput(events)).to.match(/my-custom-packer-template.json/)
     });
 
     it ('should add variables', async () => {
+        let stub = sandbox.stub();
+        stub.withArgs('variables', '\n', false).returns(['a=1', 'b=2']);
+
         let tl = <packer.InputResolver>{};
-        tl.getDelimitedInput = sandbox.stub().withArgs('variables').returns(['a=1', 'b=2']);
-        
+        tl.getDelimitedInput = stub;
+
         packer.addVariables(tool, tl);
         await tool.exec();
 
@@ -121,12 +148,16 @@ describe('packer', () => {
     });
 
     it ('should add the command', async () => {
+        let stub = sandbox.stub();
+        stub.withArgs('command').returns('build');
+
         let tl = <packer.InputResolver>{};
-        tl.getInput = sandbox.stub().withArgs('command').returns('build');
-        
+        tl.getInput = stub;
+
         packer.addCommand(tool, tl);
         await tool.exec();
 
+        sinon.assert.called(stub);
         expect(toOutput(events)).to.match(/build/)
     });
 
