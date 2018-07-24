@@ -12,7 +12,7 @@
     "author": "Manuel Riezebosch",
     "version": {
         "Major": 0,
-        "Minor": 177,
+        "Minor": 182,
         "Patch": 0
     },
     "satisfies": [],
@@ -87,6 +87,10 @@
             "required": "false"
         }
     ],
+    "OutputVariables": [{
+        "name" : "OSDiskUri",
+        "description" : "The captured VHD's URL (see [VHD or Managed Image](https://www.packer.io/docs/builders/azure.html#vhd-or-managed-image))."
+    }],
     "execution": {
         "Node": {
             "target": "src/packer.js",

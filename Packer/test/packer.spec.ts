@@ -161,6 +161,34 @@ describe('packer', () => {
         expect(toOutput(events)).to.match(/build/)
     });
 
+    it ('should output the vhd location', async () => {
+        tool.arg('OSDiskUri: https://54a34b45.blob.core.windows.net/system/Microsoft.Compute/Images/small-linux/linux-agent-osDisk.87690128-8ca6-4aa6-a3eb-607dd444e21e.vhd')
+
+        let stub = sandbox.stub();
+
+        let tl = <packer.Output & EventListener>{};
+        tl.setVariable = stub;
+        packer.addListeners(tool, tl);
+
+        await tool.exec();
+
+        sinon.assert.calledWithMatch(stub, 'OSDiskUri', /https:\/\//);
+    });
+
+    it ('should match the output location based on the start string', async () => {
+        tool.arg('asdfasdfa: https://54a34b45.blob.core.windows.net/system/Microsoft.Compute/Images/small-linux/linux-agent-osDisk.87690128-8ca6-4aa6-a3eb-607dd444e21e.vhd')
+
+        let stub = sandbox.stub();
+
+        let tl = <packer.Output & EventListener>{};
+        tl.setVariable = stub;
+        packer.addListeners(tool, tl);
+
+        await tool.exec();
+
+        sinon.assert.neverCalledWithMatch(stub, 'OSDiskUri', /https:\/\//);
+    });
+
     function toOutput(events: string[]) {
         expect(events.length).to.eq(1);
         return events[0].toString();

@@ -1,8 +1,11 @@
 import * as tl from 'vsts-task-lib';
 import { ToolRunner } from 'vsts-task-lib/toolrunner';
+import { EventEmitter } from 'events';
 
 async function run(): Promise<any> {
     let packer = tl.tool('packer');
+
+    addListeners(packer, tl);
 
     addCommand(packer, tl);
     addAzureVariables(packer, tl);
@@ -13,6 +16,7 @@ async function run(): Promise<any> {
     addTemplate(packer, tl);
 
     await packer.exec();
+    tl.setVariable('dummy', 'done');
 }
 
 export function addCommand(packer: ToolRunner, tl: InputResolver) {
@@ -57,6 +61,18 @@ export interface AzureEndpointParameterResolver {
     getEndpointDataParameter(id: string, key: string, optional: boolean): string;
 }
 
+export interface Output {
+    /**
+     * Sets a variable which will be available to subsequent tasks as well.
+     *
+     * @param     name    name of the variable to set
+     * @param     val     value to set
+     * @param     secret  whether variable is secret.  Multi-line secrets are not allowed.  Optional, defaults to false
+     * @returns   void
+     */
+    setVariable(name: string, val: string, secret?: boolean): void;
+}
+
 export function addAzureVariables(packer: ToolRunner, tl: AzureEndpointParameterResolver & InputResolver) {
     let service = tl.getInput('azureSubscription');
     let client_id = tl.getEndpointAuthorizationParameter(service, 'serviceprincipalid', false);
@@ -70,6 +86,15 @@ export function addAzureVariables(packer: ToolRunner, tl: AzureEndpointParameter
 
     let tenant_id = tl.getEndpointAuthorizationParameter(service, 'tenantid', false);
     packer.arg(['-var', `tenant_id=${tenant_id}`]);
+}
+
+export function addListeners(tool: EventEmitter, tl: Output) {
+    tool.addListener('stdout', _ => {
+        let m = _.toString();
+        if (m.startsWith('OSDiskUri: ')) {
+            tl.setVariable('OSDiskUri', m.substring(11));
+        }
+    });
 }
 
 
