@@ -1,3 +1,8 @@
+# Release Notes
+
+> **24-07-2018**
+> * Write the capture url of the VHD to the `OSDiskUri` output variable so it is accessible for downstream tasks.
+
 # Packer Tools
 
 Install and execute [packer](https://packer.io) as part of your build & release pipelines.
