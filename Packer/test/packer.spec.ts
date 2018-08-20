@@ -167,12 +167,12 @@ describe('packer', () => {
         let stub = sandbox.stub();
 
         let tl = <packer.Output & EventListener>{};
-        tl.setVariable = stub;
+        tl.command = stub;
         packer.addListeners(tool, tl);
 
         await tool.exec();
 
-        sinon.assert.calledWithMatch(stub, 'OSDiskUri', /https:\/\//);
+        sinon.assert.calledWithMatch(stub, 'task.setvariable', { 'variable': 'OSDiskUri', 'issecret': false, isOutput: true }, /https:\/\//);
     });
 
     it ('should match the output location based on the start string', async () => {

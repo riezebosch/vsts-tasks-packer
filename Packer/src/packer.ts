@@ -16,7 +16,6 @@ async function run(): Promise<any> {
     addTemplate(packer, tl);
 
     await packer.exec();
-    tl.setVariable('dummy', 'done');
 }
 
 export function addCommand(packer: ToolRunner, tl: InputResolver) {
@@ -71,6 +70,7 @@ export interface Output {
      * @returns   void
      */
     setVariable(name: string, val: string, secret?: boolean): void;
+    command(command: string, properties: any, message: string): void;
 }
 
 export function addAzureVariables(packer: ToolRunner, tl: AzureEndpointParameterResolver & InputResolver) {
@@ -92,7 +92,7 @@ export function addListeners(tool: EventEmitter, tl: Output) {
     tool.addListener('stdout', _ => {
         let m = _.toString();
         if (m.startsWith('OSDiskUri: ')) {
-            tl.setVariable('OSDiskUri', m.substring(11));
+            tl.command('task.setvariable', { 'variable': 'OSDiskUri', 'issecret': false, isOutput: true }, m.substring(11));
         }
     });
 }
