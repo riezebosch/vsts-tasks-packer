@@ -4,8 +4,8 @@
   "description": "Install and execute [packer](https://packer.io) as part of your build & release pipelines.",
   "main": "index.js",
   "scripts": {
-    "build:packer":"cd Packer && npm run build:prod",
-    "build:tool":"cd PackerTool && npm run build:prod",
+    "build:packer": "cd Packer && npm run build:prod",
+    "build:tool": "cd PackerTool && npm run build:prod",
     "build": "npm run build:packer && npm run build:tool && tfx extension create --manifest-globs vss-extension.json"
   },
   "repository": {
