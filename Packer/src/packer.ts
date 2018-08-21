@@ -88,12 +88,14 @@ export function addAzureVariables(packer: ToolRunner, tl: AzureEndpointParameter
 }
 
 export function addListeners(tool: EventEmitter, tl: Output) {
-    tool.addListener('stdout', _ => {
-        let m = _.toString();
-        if (m.startsWith('OSDiskUri: ')) {
-            tl.setVariable('OSDiskUri', m.substring(11));
+    tool.addListener('stdout', _ => extractVariable(_.toString()));
+
+    function extractVariable(m: string) {
+        let match = m.match(/(OSDiskUri|OSDiskUriReadOnlySas|TemplateUri|TemplateUriReadOnlySas): (.*)/);
+        if (match) {
+            tl.setVariable(match[1], match[2]);
         }
-    });
+    }
 }
 
 

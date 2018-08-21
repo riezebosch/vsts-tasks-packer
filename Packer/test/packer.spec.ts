@@ -161,22 +161,24 @@ describe('packer', () => {
         expect(toOutput(events)).to.match(/build/)
     });
 
-    it ('should output the vhd location', async () => {
-        tool.arg('OSDiskUri: https://54a34b45.blob.core.windows.net/system/Microsoft.Compute/Images/small-linux/linux-agent-osDisk.87690128-8ca6-4aa6-a3eb-607dd444e21e.vhd')
-
-        let stub = sandbox.stub();
-
-        let tl = <packer.Output & EventListener>{};
-        tl.setVariable = stub;
-        packer.addListeners(tool, tl);
-
-        await tool.exec();
-
-        sinon.assert.calledWithMatch(stub, 'OSDiskUri', /https:\/\//);
+    it ('should output the OSDiskUri', async () => {
+        await checkVariable(tool, sandbox, 'OSDiskUri');
     });
 
-    it ('should match the output location based on the start string', async () => {
-        tool.arg('asdfasdfa: https://54a34b45.blob.core.windows.net/system/Microsoft.Compute/Images/small-linux/linux-agent-osDisk.87690128-8ca6-4aa6-a3eb-607dd444e21e.vhd')
+    it ('should output the OSDiskUriReadOnlySas', async () => {
+        await checkVariable(tool, sandbox, 'OSDiskUriReadOnlySas');
+    });
+
+    it ('should output the TemplateUri', async () => {
+        await checkVariable(tool, sandbox, 'TemplateUri');
+    });
+
+    it ('should output the TemplateUriReadOnlySas', async () => {
+        await checkVariable(tool, sandbox, 'TemplateUriReadOnlySas');
+    });
+
+    it ('should only outputs wellknown variables', async () => {
+        tool.arg('asdf: qerw')
 
         let stub = sandbox.stub();
 
@@ -186,7 +188,7 @@ describe('packer', () => {
 
         await tool.exec();
 
-        sinon.assert.neverCalledWithMatch(stub, 'OSDiskUri', /https:\/\//);
+        sinon.assert.notCalled(stub);
     });
 
     function toOutput(events: string[]) {
@@ -196,3 +198,16 @@ describe('packer', () => {
 });
 
 
+
+async function checkVariable(tool: tr.ToolRunner, sandbox: sinon.SinonSandbox, variable: string) {
+    tool.arg(`${variable}: https://asdf.blob.core.windows.net/system/Microsoft.Compute/Images/agsdf-vsts-agent-win/windows-agent-vmTemplate.1a1b380b-5109-4eb0-b818-30f82308438d.json`);
+
+    let stub = sandbox.stub();
+    let tl = <packer.Output & EventListener>{};
+    tl.setVariable = stub;
+
+    packer.addListeners(tool, tl);
+    await tool.exec();
+
+    sinon.assert.calledWithMatch(stub, variable, /https:\/\//);
+}
