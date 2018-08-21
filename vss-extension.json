@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "Packer",
     "name": "Packer",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "publisher": "riezebosch",
     "public": true,
     "targets": [

@@ -1,5 +1,9 @@
 # Release Notes
 
+> **21-08-2018**
+> * Added additional output variables for OSDiskUriReadOnlySas, TemplateUri and TemplateUriReadOnlySas (when building VHD's)
+> * Write variables as output so they're also available in [YAML builds].(https://github.com/Microsoft/vsts-agent/blob/master/docs/preview/yamlgettingstarted-outputvariables.md).
+> 
 > **24-07-2018**
 > * Write the capture url of the VHD to the `OSDiskUri` output variable so it is accessible for downstream tasks.
 
