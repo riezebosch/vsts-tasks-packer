@@ -6,7 +6,7 @@ import * as tr from 'vsts-task-lib/toolrunner'
 describe('packer', () => {
     let events: string[];
     let tool: tr.ToolRunner;
-    let sandbox = sinon.sandbox.create();
+    let sandbox = sinon.createSandbox();
 
     beforeEach(() => {
         events = [];
@@ -167,12 +167,12 @@ describe('packer', () => {
         let stub = sandbox.stub();
 
         let tl = <packer.Output & EventListener>{};
-        tl.command = stub;
+        tl.setVariable = stub;
         packer.addListeners(tool, tl);
 
         await tool.exec();
 
-        sinon.assert.calledWithMatch(stub, 'task.setvariable', { 'variable': 'OSDiskUri', 'issecret': false, isOutput: true }, /https:\/\//);
+        sinon.assert.calledWithMatch(stub, 'OSDiskUri', /https:\/\//);
     });
 
     it ('should match the output location based on the start string', async () => {

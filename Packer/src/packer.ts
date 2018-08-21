@@ -1,12 +1,12 @@
 import * as tl from 'vsts-task-lib';
+import * as tlext from './tasklibext'
 import { ToolRunner } from 'vsts-task-lib/toolrunner';
 import { EventEmitter } from 'events';
 
 async function run(): Promise<any> {
     let packer = tl.tool('packer');
 
-    addListeners(packer, tl);
-
+    addListeners(packer, tlext);
     addCommand(packer, tl);
     addAzureVariables(packer, tl);
     addForce(packer, tl);
@@ -70,7 +70,6 @@ export interface Output {
      * @returns   void
      */
     setVariable(name: string, val: string, secret?: boolean): void;
-    command(command: string, properties: any, message: string): void;
 }
 
 export function addAzureVariables(packer: ToolRunner, tl: AzureEndpointParameterResolver & InputResolver) {
@@ -92,7 +91,7 @@ export function addListeners(tool: EventEmitter, tl: Output) {
     tool.addListener('stdout', _ => {
         let m = _.toString();
         if (m.startsWith('OSDiskUri: ')) {
-            tl.command('task.setvariable', { 'variable': 'OSDiskUri', 'issecret': false, isOutput: true }, m.substring(11));
+            tl.setVariable('OSDiskUri', m.substring(11));
         }
     });
 }
@@ -103,3 +102,5 @@ run().then(_ =>
 ).catch(error =>
     tl.setResult(tl.TaskResult.Failed, error)
 );
+
+
