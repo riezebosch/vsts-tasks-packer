@@ -4,6 +4,10 @@ import os = require('os');
 
 describe('tasklib extensions', () => {
     const write = process.stdout.write;
+
+    beforeEach(() => {
+        sinon.reset();
+    });
     
     it('should add isOutput to the output of output variables', () => {
         let stub = sinon.stub();

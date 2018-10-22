@@ -1,213 +1,147 @@
-import * as packer from '../src/packer'
+import * as task from '../src/packer'
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import * as tr from 'vsts-task-lib/toolrunner'
+import * as lib from 'vsts-task-lib';
+import * as libext from '../src/tasklibext'
+import * as uuid from 'uuid';
 
 describe('packer', () => {
-    let events: string[];
-    let tool: tr.ToolRunner;
-    let sandbox = sinon.createSandbox();
+    let input = sinon.stub(lib, 'getInput');
+    let authorization = sinon.stub(lib, 'getEndpointAuthorizationParameter');
+    let endpointData = sinon.stub(lib, 'getEndpointDataParameter');
+    let boolInput = sinon.stub(lib, 'getBoolInput');
+    let filePathSupplied = sinon.stub(lib, 'filePathSupplied');
+    let pathInput = sinon.stub(lib, 'getPathInput');
+    let delimitedInput = sinon.stub(lib, 'getDelimitedInput').returns([]);
+    let setOutVariable = sinon.stub(libext, 'setVariable');
+
+    let listeners: ({ event: string, listener: (x: string) => void })[] = [];
+    let tool = {
+        arg: sinon.stub(),
+        argIf: sinon.stub(),
+        addListener: (event, listener) => listeners.push({ event, listener }),
+        line: sinon.stub(),
+        exec: () => {}
+    };
+
+    sinon.stub(lib, 'tool').withArgs('packer').returns(tool);
 
     beforeEach(() => {
-        events = [];
-        tool = new tr.ToolRunner('echo');
-        tool.addListener('stdout', _ => events.push(_));
-
+        sinon.resetHistory();
     });
 
-    afterEach(() => {
-        sandbox.restore();
+    after(() => {
+        sinon.restore();
     })
 
-    it ('should add the subscription id, client_id, client_secret and tenant_id', async () => {
+    it('should add the subscription id, client_id, client_secret and tenant_id', async () => {
         let service = 'my-service';
 
-        let input = sandbox.stub();
         input.withArgs('azureSubscription').returns(service);
-
-        let authorization = sandbox.stub();
         authorization.withArgs(service, 'serviceprincipalid', false).returns('asdf');
         authorization.withArgs(service, 'serviceprincipalkey', false).returns('qwer');
         authorization.withArgs(service, 'tenantid', false).returns('qefda');
-        
-        let data = sandbox.stub();
-        data.withArgs(service, 'SubscriptionId', false).returns('subcriptionasdf');
+        endpointData.withArgs(service, 'SubscriptionId', false).returns('subcriptionasdf');
 
-        let tl = <packer.InputResolver & packer.AzureEndpointParameterResolver>{};
-        tl.getInput = input;
-        tl.getEndpointAuthorizationParameter = authorization;
-        tl.getEndpointDataParameter = data;
-
-        packer.addAzureVariables(tool, tl);
+        await task.run();
         sinon.assert.called(authorization);
-        sinon.assert.called(data);
+        sinon.assert.called(endpointData);
 
-        await tool.exec();
-
-        let output = toOutput(events);
-        expect(output).to.match(/-var tenant_id=qefda/);
-        expect(output).to.match(/-var client_id=asdf/);
-        expect(output).to.match(/-var client_secret=qwer/);
-        expect(output).to.match(/-var subscription_id=subcriptionasdf/);      
+        sinon.assert.calledWith(tool.arg, ['-var', 'tenant_id=qefda']);
+        sinon.assert.calledWith(tool.arg, ['-var', 'tenant_id=qefda']);
+        sinon.assert.calledWith(tool.arg, ['-var', 'client_id=asdf']);
+        sinon.assert.calledWith(tool.arg, ['-var', 'client_secret=qwer']);
+        sinon.assert.calledWith(tool.arg, ['-var', 'subscription_id=subcriptionasdf']);
     });
 
-    it ('should add force when enabled', async () => {
-        let stub = sandbox.stub();
-        stub.withArgs("force").returns(true);
-
-        let tl = <packer.InputResolver>{};
-        tl.getBoolInput = stub;
-        
-        packer.addForce(tool, tl);
-        await tool.exec();
-
-        expect(toOutput(events)).to.match(/-force/)
+    it('should add force when enabled', async () => {
+        boolInput.withArgs("force").returns(true);
+        await task.run();
+        sinon.assert.calledWith(tool.argIf, true, '-force');
     });
 
-    it ('should not add force when disabled', async () => {
-        let stub = sandbox.stub();
-        stub.withArgs("force").returns(false);
-
-        let tl = <packer.InputResolver>{};
-        tl.getBoolInput = stub;
-
-        packer.addForce(tool, tl);
-        await tool.exec();
-
-        expect(toOutput(events)).to.not.match(/-force/)
+    it('should not add force when disabled', async () => {
+        boolInput.withArgs("force").returns(false);
+        await task.run();
+        sinon.assert.calledWith(tool.argIf, false, '-force');
     });
 
-    it ('should add variables file when specified', async () => {
-        let supplied = sandbox.stub();
-        supplied.withArgs('variables-file').returns(true);
+    it('should add variables file when specified', async () => {
+        filePathSupplied.withArgs('variables-file').returns(true);
+        pathInput.withArgs('variables-file', false, true).returns('asdf.json');
 
-        let path = sandbox.stub();
-        path.withArgs('variables-file', false, true).returns('asdf.json');
-
-        let tl = <packer.PathResolver>{};
-        tl.filePathSupplied = supplied;
-        tl.getPathInput = path;
-        
-        packer.addVariablesFile(tool, tl);
-        await tool.exec();
-
-        expect(toOutput(events)).to.match(/-var-file asdf.json/)
+        await task.run();
+        sinon.assert.calledWith(tool.argIf, true, ['-var-file', 'asdf.json']);
     });
 
-    it ('should not add variables file when not specified', async () => {
-        let tl = <packer.PathResolver>{};
-        tl.filePathSupplied = sandbox.stub().returns(false);
-        tl.getPathInput = sandbox.stub().returns('asdf.json');
-        
-        packer.addVariablesFile(tool, tl);
-        await tool.exec();
+    it('should not add variables file when not specified', async () => {
+        filePathSupplied.returns(false);
+        pathInput.returns('asdf.json');
 
-        expect(toOutput(events)).to.not.match(/-var-file asdf.json/)
+        await task.run();
+        sinon.assert.neverCalledWith(tool.argIf, false, ['-var-file', 'asdf.json']);
     });
 
-    it ('should add options', async () => {
-        let stub = sandbox.stub();
-        stub.withArgs('options').returns('--color=false');
-        
-        let tl = <packer.InputResolver>{};
-        tl.getInput = stub;
+    it('should add options', async () => {
+        input.withArgs('options').returns('--color=false');
 
-        packer.addOptions(tool, tl);
-        await tool.exec();
-
-        expect(toOutput(events)).to.match(/-color=false/)
+        await task.run();
+        sinon.assert.calledWith(tool.line, '--color=false');
     });
 
-    it ('should add template', async () => {
-        let stub = sandbox.stub();
-        stub.withArgs('templatePath', true, true).returns('my-custom-packer-template.json');
+    it('should add template', async () => {
+        let stub = pathInput.withArgs('templatePath', true, true).returns('my-custom-packer-template.json');
 
-        let tl = <packer.PathResolver>{};
-        tl.getPathInput = stub;
-
-        packer.addTemplate(tool, tl);
-        await tool.exec();
-
+        await task.run();
         sinon.assert.called(stub);
-        expect(toOutput(events)).to.match(/my-custom-packer-template.json/)
+        sinon.assert.calledWith(tool.arg, 'my-custom-packer-template.json')
     });
 
-    it ('should add variables', async () => {
-        let stub = sandbox.stub();
-        stub.withArgs('variables', '\n', false).returns(['a=1', 'b=2']);
+    it('should add variables', async () => {
+        delimitedInput.withArgs('variables', '\n', false).returns(['a=1', 'b=2']);
 
-        let tl = <packer.InputResolver>{};
-        tl.getDelimitedInput = stub;
-
-        packer.addVariables(tool, tl);
-        await tool.exec();
-
-        let output = toOutput(events);
-        expect(output).to.match(/-var a=1/);
-        expect(output).to.match(/-var b=2/);
+        await task.run();
+        sinon.assert.calledWith(tool.arg, ['-var', 'a=1']);
+        sinon.assert.calledWith(tool.arg, ['-var', 'b=2']);
     });
 
-    it ('should add the command', async () => {
-        let stub = sandbox.stub();
-        stub.withArgs('command').returns('build');
+    it('should add the command', async () => {
+        let stub = input.withArgs('command').returns('build');
 
-        let tl = <packer.InputResolver>{};
-        tl.getInput = stub;
-
-        packer.addCommand(tool, tl);
-        await tool.exec();
-
+        await task.run();
         sinon.assert.called(stub);
-        expect(toOutput(events)).to.match(/build/)
+        sinon.assert.calledWith(tool.arg, 'build');
     });
 
-    it ('should output the OSDiskUri', async () => {
-        await checkVariable(tool, sandbox, 'OSDiskUri');
+    it('should output the OSDiskUri', async () => {
+        await checkVariable('OSDiskUri');
     });
 
-    it ('should output the OSDiskUriReadOnlySas', async () => {
-        await checkVariable(tool, sandbox, 'OSDiskUriReadOnlySas');
+    it('should output the OSDiskUriReadOnlySas', async () => {
+        await checkVariable('OSDiskUriReadOnlySas');
     });
 
-    it ('should output the TemplateUri', async () => {
-        await checkVariable(tool, sandbox, 'TemplateUri');
+    it('should output the TemplateUri', async () => {
+        await checkVariable('TemplateUri');
     });
 
-    it ('should output the TemplateUriReadOnlySas', async () => {
-        await checkVariable(tool, sandbox, 'TemplateUriReadOnlySas');
+    it('should output the TemplateUriReadOnlySas', async () => {
+        await checkVariable('TemplateUriReadOnlySas');
     });
 
-    it ('should only outputs wellknown variables', async () => {
-        tool.arg('asdf: qerw')
+    it('should only outputs wellknown variables', async () => {
+        let data = uuid.v4();
+        tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => _.listener(`asdf: ${data}`));
 
-        let stub = sandbox.stub();
-
-        let tl = <packer.Output & EventListener>{};
-        tl.setVariable = stub;
-        packer.addListeners(tool, tl);
-
-        await tool.exec();
-
-        sinon.assert.notCalled(stub);
+        await task.run();
+        sinon.assert.notCalled(setOutVariable);
     });
 
-    function toOutput(events: string[]) {
-        expect(events.length).to.eq(1);
-        return events[0].toString();
+    async function checkVariable(variable: string) {
+        let data = uuid.v4();
+        tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => _.listener(`${variable}: ${data}`));
+
+        await task.run();
+        sinon.assert.calledWithMatch(setOutVariable, variable, data);
     }
 });
-
-
-
-async function checkVariable(tool: tr.ToolRunner, sandbox: sinon.SinonSandbox, variable: string) {
-    tool.arg(`${variable}: https://asdf.blob.core.windows.net/system/Microsoft.Compute/Images/agsdf-vsts-agent-win/windows-agent-vmTemplate.1a1b380b-5109-4eb0-b818-30f82308438d.json`);
-
-    let stub = sandbox.stub();
-    let tl = <packer.Output & EventListener>{};
-    tl.setVariable = stub;
-
-    packer.addListeners(tool, tl);
-    await tool.exec();
-
-    sinon.assert.calledWithMatch(stub, variable, /https:\/\//);
-}
