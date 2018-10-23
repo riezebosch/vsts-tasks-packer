@@ -8,6 +8,7 @@ export async function run(): Promise<any> {
 
     addListeners(packer);
     addCommand(packer);
+    addAwsVariables(packer);
     addAzureVariables(packer);
     addForce(packer);
     addVariables(packer);
@@ -45,19 +46,35 @@ export function addTemplate(packer: ToolRunner) {
     packer.arg(template);
 }
 
+function addAwsVariables(packer: ToolRunner) {
+    let serviceType = tl.getInput('serviceType', true);
+    if (serviceType == 'aws') {
+        let id = tl.getInput('awsSubscription');
+
+        let access_key = tl.getEndpointAuthorizationParameter(id, 'username', false);
+        packer.arg(['-var', `access_key=${access_key}`]);
+
+        let secret_key = tl.getEndpointAuthorizationParameter(id, 'password', false);
+        packer.arg(['-var', `secret_key=${secret_key}`]);
+    }
+}
+
 export function addAzureVariables(packer: ToolRunner) {
-    let service = tl.getInput('azureSubscription');
-    let client_id = tl.getEndpointAuthorizationParameter(service, 'serviceprincipalid', false);
-    packer.arg(['-var', `client_id=${client_id}`]);
+    let serviceType = tl.getInput('serviceType', true);
+    if (serviceType == 'azure') {
+        let id = tl.getInput('azureSubscription');
+        let client_id = tl.getEndpointAuthorizationParameter(id, 'serviceprincipalid', false);
+        packer.arg(['-var', `client_id=${client_id}`]);
 
-    let client_secret = tl.getEndpointAuthorizationParameter(service, 'serviceprincipalkey', false);
-    packer.arg(['-var', `client_secret=${client_secret}`]);
+        let client_secret = tl.getEndpointAuthorizationParameter(id, 'serviceprincipalkey', false);
+        packer.arg(['-var', `client_secret=${client_secret}`]);
 
-    let subscription_id = tl.getEndpointDataParameter(service, "SubscriptionId", false);
-    packer.arg(['-var', `subscription_id=${subscription_id}`]);
+        let subscription_id = tl.getEndpointDataParameter(id, "SubscriptionId", false);
+        packer.arg(['-var', `subscription_id=${subscription_id}`]);
 
-    let tenant_id = tl.getEndpointAuthorizationParameter(service, 'tenantid', false);
-    packer.arg(['-var', `tenant_id=${tenant_id}`]);
+        let tenant_id = tl.getEndpointAuthorizationParameter(id, 'tenantid', false);
+        packer.arg(['-var', `tenant_id=${tenant_id}`]);
+    }
 }
 
 export function addListeners(tool: EventEmitter) {

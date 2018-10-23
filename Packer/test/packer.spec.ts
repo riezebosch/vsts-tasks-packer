@@ -34,14 +34,39 @@ describe('packer', () => {
         sinon.restore();
     })
 
-    it('should add the subscription id, client_id, client_secret and tenant_id', async () => {
-        let service = 'my-service';
+    it ('should add authorization for aws endpoint when specified', async () => {
+        let serviceType = input.withArgs('serviceType', true).returns('aws');
 
-        input.withArgs('azureSubscription').returns(service);
-        authorization.withArgs(service, 'serviceprincipalid', false).returns('asdf');
-        authorization.withArgs(service, 'serviceprincipalkey', false).returns('qwer');
-        authorization.withArgs(service, 'tenantid', false).returns('qefda');
-        endpointData.withArgs(service, 'SubscriptionId', false).returns('subcriptionasdf');
+        let id = uuid.v4();
+        input.withArgs('awsSubscription').returns(id);
+        authorization.withArgs(id, 'username', false).returns('asdf');
+        authorization.withArgs(id, 'password', false).returns('qwer');
+
+        await task.run();
+        sinon.assert.called(serviceType);
+        sinon.assert.called(authorization);
+
+        sinon.assert.calledWith(tool.arg, ['-var', 'access_key=asdf']);
+        sinon.assert.calledWith(tool.arg, ['-var', 'secret_key=qwer']);
+    });
+
+    it ('should only add authorization for aws endpoint when specified', async () => {
+        let serviceType = input.withArgs('serviceType', true).returns('asdf');
+
+        await task.run();
+        sinon.assert.called(serviceType);
+        sinon.assert.notCalled(authorization);
+    });
+
+    it('should add the subscription id, client_id, client_secret and tenant_id', async () => {
+        input.withArgs('serviceType', true).returns('azure');
+
+        let id = uuid.v4();
+        input.withArgs('azureSubscription').returns(id);
+        authorization.withArgs(id, 'serviceprincipalid', false).returns('asdf');
+        authorization.withArgs(id, 'serviceprincipalkey', false).returns('qwer');
+        authorization.withArgs(id, 'tenantid', false).returns('qefda');
+        endpointData.withArgs(id, 'SubscriptionId', false).returns('subcriptionasdf');
 
         await task.run();
         sinon.assert.called(authorization);
