@@ -11,10 +11,11 @@
     ],
     "author": "Manuel Riezebosch",
     "version": {
-        "Major": 0,
+        "Major": 1,
         "Minor": 185,
         "Patch": 0
     },
+    "preview": true,
     "satisfies": [],
     "demands": [
         "Packer"
@@ -22,13 +23,13 @@
     "instanceNameFormat": "Packer $(command)",
     "groups": [
         {
-            "name": "serviceConnection",
-            "displayName": "Service Connection",
+            "name": "connectedService",
+            "displayName": "Connected Service",
             "isExpanded": true
         },
         {
             "name": "command",
-            "displayName": "Command",
+            "displayName": "Command & Options",
             "isExpanded": true
         },
         {
@@ -39,36 +40,39 @@
     ],
     "inputs": [
         {
-            "name": "serviceType",
+            "name": "connectedServiceType",
             "type": "pickList",
-            "label": "Service Connection Type",
+            "label": "Connected Service Type",
             "required": true,
-            "helpMarkDown": "Select a service connection to provide packer with authentication details.",
+            "helpMarkDown": "Select a connected service to provide packer with authentication details.",
             "options": {
                 "none": "None",
                 "azure": "Azure",
                 "aws": "AWS"
             },
             "defaultValue": "azure",
-            "groupName": "serviceConnection"
+            "groupName": "connectedService"
         },
         {
-            "name": "azureSubscription",
+            "name": "connectedServiceAzure",
+            "aliases": [
+                "azureSubscription"
+            ],
             "type": "connectedService:AzureRM",
-            "label": "Azure subscription",
+            "label": "Azure Resource Manager Subscription",
             "required": true,
             "helpMarkDown": "Select the Azure Resource Manager subscription for building and storing the machine image.",
-            "visibleRule": "serviceType = azure",
-            "groupName": "serviceConnection"
+            "visibleRule": "connectedServiceType = azure",
+            "groupName": "connectedService"
         },
         {
-            "name": "awsSubscription",
+            "name": "connectedServiceAWS",
             "type": "connectedService:AWS",
-            "label": "AWS subscription",
+            "label": "AWS Service Connection",
             "required": true,
-            "helpMarkDown": "Select the AWS subscription for building and storing the machine image.",
-            "visibleRule": "serviceType = aws",
-            "groupName": "serviceConnection"
+            "helpMarkDown": "Select the AWS service connection for building and storing the machine image.",
+            "visibleRule": "connectedServiceType = aws",
+            "groupName": "connectedService"
         },
         {
             "name": "templatePath",

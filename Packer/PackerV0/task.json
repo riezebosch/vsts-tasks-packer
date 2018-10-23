@@ -1,0 +1,109 @@
+{
+    "id": "b3c6bb07-1292-44e7-9ec9-b211fc98b6d2",
+    "name": "Packer",
+    "friendlyName": "Packer",
+    "description": "Build Automated Machine Images",
+    "helpMarkDown": "[More information](https://packer.io)",
+    "category": "Tool",
+    "runsOn": [
+        "Agent",
+        "DeploymentGroup"
+    ],
+    "author": "Manuel Riezebosch",
+    "version": {
+        "Major": 0,
+        "Minor": 184,
+        "Patch": 0
+    },
+    "satisfies": [],
+    "demands": ["Packer"],
+    "instanceNameFormat": "Packer $(command)",
+    "inputs": [{
+            "name": "azureSubscription",
+            "type": "connectedService:AzureRM",
+            "label": "Azure subscription",
+            "required": true,
+            "helpMarkDown": "Select the Azure Resource Manager subscription for building and storing the machine image."
+        },
+        {
+            "name": "templatePath",
+            "type": "filePath",
+            "label": "Packer template location",
+            "required": true,
+            "helpMarkDown": "Path to a custom user-provided template."
+        },
+        {
+            "name": "command",
+            "type": "pickList",
+            "label": "Command",
+            "required": true,
+            "helpMarkDown": "See [Packer Commands (CLI)](https://www.packer.io/docs/commands/index.html) for more information.",
+            "properties": {
+                "EditableOptions": "True"
+            },
+            "options": {
+                "build": "build", 
+                "fix": "fix",
+                "inspect": "inspect",
+                "push": "push",
+                "validate": "validate", 
+                "version": "version"
+            },
+            "defaultValue": "build"
+        },
+        {
+            "name": "force",
+            "type": "boolean",
+            "label": "Force",
+            "defaultValue": false,
+            "helpMarkDown": "Force a build to continue if artifacts exist, deletes existing artifacts",
+            "required": "false",
+            "visibleRule": "command = build"
+        },
+        {
+            "name": "variables",
+            "type": "multiLine",
+            "label": "Variables",
+            "defaultValue": "",
+            "helpMarkDown": "Variable for templates, can be used multiple times. Place each variable on a newline in the format of `key=value`.",
+            "required": "false",
+            "visibleRule": "command = build || command = validate"
+        },
+        {
+            "name": "variables-file",
+            "type": "filePath",
+            "label": "Variables file",
+            "defaultValue": "",
+            "helpMarkDown": "JSON file containing user variables.",
+            "required": "false",
+            "visibleRule": "command = build || command = validate"
+        },
+        {
+            "name": "options",
+            "type": "string",
+            "label": "Options",
+            "defaultValue": "",
+            "helpMarkDown": "Additional options, see [Packer Commands (CLI)](https://www.packer.io/docs/commands/index.html) for more information.",
+            "required": "false"
+        }
+    ],
+    "OutputVariables": [{
+        "name" : "OSDiskUri",
+        "description" : "The captured VHD's URL (see [VHD or Managed Image](https://www.packer.io/docs/builders/azure.html#vhd-or-managed-image))."
+    },
+    {
+        "name" : "OSDiskUriReadOnlySas"
+    },
+    {
+        "name" : "TemplateUri"
+    },
+    {
+        "name" : "TemplateUriReadOnlySas"
+    }],
+    "execution": {
+        "Node": {
+            "target": "src/packer.js",
+            "argumentFormat": ""
+        }
+    }
+}

@@ -35,10 +35,10 @@ describe('packer', () => {
     })
 
     it ('should add authorization for aws endpoint when specified', async () => {
-        let serviceType = input.withArgs('serviceType', true).returns('aws');
+        let serviceType = input.withArgs('connectedServiceType', true).returns('aws');
 
         let id = uuid.v4();
-        input.withArgs('awsSubscription').returns(id);
+        input.withArgs('connectedServiceAWS').returns(id);
         authorization.withArgs(id, 'username', false).returns('asdf');
         authorization.withArgs(id, 'password', false).returns('qwer');
 
@@ -51,7 +51,7 @@ describe('packer', () => {
     });
 
     it ('should only add authorization for aws endpoint when specified', async () => {
-        let serviceType = input.withArgs('serviceType', true).returns('asdf');
+        let serviceType = input.withArgs('connectedServiceType', true).returns('asdf');
 
         await task.run();
         sinon.assert.called(serviceType);
@@ -59,10 +59,10 @@ describe('packer', () => {
     });
 
     it('should add the subscription id, client_id, client_secret and tenant_id', async () => {
-        input.withArgs('serviceType', true).returns('azure');
+        input.withArgs('connectedServiceType', true).returns('azure');
 
         let id = uuid.v4();
-        input.withArgs('azureSubscription').returns(id);
+        input.withArgs('connectedServiceAzure').returns(id);
         authorization.withArgs(id, 'serviceprincipalid', false).returns('asdf');
         authorization.withArgs(id, 'serviceprincipalkey', false).returns('qwer');
         authorization.withArgs(id, 'tenantid', false).returns('qefda');

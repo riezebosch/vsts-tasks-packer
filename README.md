@@ -6,7 +6,7 @@ Install and execute [packer](https://packer.io) as part of your build & release 
 ## Release Notes
 
 > **23-10-2018**
-> * Support for AWS.
+> * Support for AWS in V1-peview.
 > * Default version for packer tool updated: `1.3.1`
 >
 > **21-08-2018**
@@ -42,7 +42,7 @@ Secret Access Key       | secret_key
 
 Note: The variable name is (currently) static and the template must therefor use this provided name. Luckily this matches the required input for the respective builders.
 
-## YAML
+## Example YAML
 
 ```yaml
 resources:
@@ -53,14 +53,14 @@ steps:
   inputs:
     version: 1.3.1
 
-- task: Packer@0
+- task: Packer@1
   displayName: 'Packer build'
   inputs:
-    service: azure #azure|aws|none
-    azureSubscription: 'My Subscription'
-    #awsSubscription: 'aws demo'
+    connectedServiceType: azure #azure|aws|none
+    connectedServiceAzure: 'My Subscription'
+    #connectedServiceAWS: 'aws demo'
     templatePath: linux.json
-    #force: true
+    #force: true|false Force a build to continue if artifacts exist, deletes existing artifacts
     variables: |+
         resource_group=$(resource-group)
         managed_image_name=small-linux

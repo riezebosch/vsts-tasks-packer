@@ -47,9 +47,9 @@ export function addTemplate(packer: ToolRunner) {
 }
 
 function addAwsVariables(packer: ToolRunner) {
-    let serviceType = tl.getInput('serviceType', true);
+    let serviceType = tl.getInput('connectedServiceType', true);
     if (serviceType == 'aws') {
-        let id = tl.getInput('awsSubscription');
+        let id = tl.getInput('connectedServiceAWS');
 
         let access_key = tl.getEndpointAuthorizationParameter(id, 'username', false);
         packer.arg(['-var', `access_key=${access_key}`]);
@@ -60,9 +60,9 @@ function addAwsVariables(packer: ToolRunner) {
 }
 
 export function addAzureVariables(packer: ToolRunner) {
-    let serviceType = tl.getInput('serviceType', true);
+    let serviceType = tl.getInput('connectedServiceType', true);
     if (serviceType == 'azure') {
-        let id = tl.getInput('azureSubscription');
+        let id = tl.getInput('connectedServiceAzure');
         let client_id = tl.getEndpointAuthorizationParameter(id, 'serviceprincipalid', false);
         packer.arg(['-var', `client_id=${client_id}`]);
 

@@ -1,0 +1,40 @@
+{
+  "name": "vsts-packer-tasks",
+  "version": "0.0.1",
+  "description": "Packer Tasks for VSTS",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "build:prod": "npm i && npm run build && npm prune --production && npm dedupe",
+    "pretest": "npm run build",
+    "test": "mocha --recursive",
+    "upload": "npm run build:prod && tfx build tasks upload --task-path ."
+  },
+  "keywords": [
+    "packer",
+    "vsts"
+  ],
+  "author": "Manuel Riezebosch",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "vsts-task-lib": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.7.1",
+    "@types/sinon": "^5.0.1",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "sinon": "^6.1.5",
+    "stryker": "^0.28.0",
+    "stryker-api": "^0.20.0",
+    "stryker-baseline-reporter": "^1.0.3",
+    "stryker-html-reporter": "^0.16.0",
+    "stryker-mocha-framework": "^0.12.0",
+    "stryker-mocha-runner": "^0.14.0",
+    "stryker-typescript": "^0.13.0",
+    "typescript": "^3.0.1"
+  }
+}
