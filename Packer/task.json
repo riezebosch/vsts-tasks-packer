@@ -16,21 +16,67 @@
         "Patch": 0
     },
     "satisfies": [],
-    "demands": ["Packer"],
+    "demands": [
+        "Packer"
+    ],
     "instanceNameFormat": "Packer $(command)",
-    "inputs": [{
+    "groups": [
+        {
+            "name": "serviceConnection",
+            "displayName": "Service Connection",
+            "isExpanded": true
+        },
+        {
+            "name": "command",
+            "displayName": "Command",
+            "isExpanded": true
+        },
+        {
+            "name": "template",
+            "displayName": "Template",
+            "isExpanded": true
+        }
+    ],
+    "inputs": [
+        {
+            "name": "serviceType",
+            "type": "pickList",
+            "label": "Service Connection Type",
+            "required": true,
+            "helpMarkDown": "Select a service connection to provide packer with authentication details.",
+            "options": {
+                "none": "None",
+                "azure": "Azure",
+                "aws": "AWS"
+            },
+            "defaultValue": "azure",
+            "groupName": "serviceConnection"
+        },
+        {
             "name": "azureSubscription",
             "type": "connectedService:AzureRM",
             "label": "Azure subscription",
             "required": true,
-            "helpMarkDown": "Select the Azure Resource Manager subscription for building and storing the machine image."
+            "helpMarkDown": "Select the Azure Resource Manager subscription for building and storing the machine image.",
+            "visibleRule": "serviceType = azure",
+            "groupName": "serviceConnection"
+        },
+        {
+            "name": "awsSubscription",
+            "type": "connectedService:AWS",
+            "label": "AWS subscription",
+            "required": true,
+            "helpMarkDown": "Select the AWS subscription for building and storing the machine image.",
+            "visibleRule": "serviceType = aws",
+            "groupName": "serviceConnection"
         },
         {
             "name": "templatePath",
             "type": "filePath",
             "label": "Packer template location",
             "required": true,
-            "helpMarkDown": "Path to a custom user-provided template."
+            "helpMarkDown": "Path to the packer template.",
+            "groupName": "template"
         },
         {
             "name": "command",
@@ -42,14 +88,15 @@
                 "EditableOptions": "True"
             },
             "options": {
-                "build": "build", 
+                "build": "build",
                 "fix": "fix",
                 "inspect": "inspect",
                 "push": "push",
-                "validate": "validate", 
+                "validate": "validate",
                 "version": "version"
             },
-            "defaultValue": "build"
+            "defaultValue": "build",
+            "groupName": "command"
         },
         {
             "name": "force",
@@ -58,7 +105,8 @@
             "defaultValue": false,
             "helpMarkDown": "Force a build to continue if artifacts exist, deletes existing artifacts",
             "required": "false",
-            "visibleRule": "command = build"
+            "visibleRule": "command = build",
+            "groupName": "command"
         },
         {
             "name": "variables",
@@ -67,7 +115,8 @@
             "defaultValue": "",
             "helpMarkDown": "Variable for templates, can be used multiple times. Place each variable on a newline in the format of `key=value`.",
             "required": "false",
-            "visibleRule": "command = build || command = validate"
+            "visibleRule": "command = build || command = validate",
+            "groupName": "command"
         },
         {
             "name": "variables-file",
@@ -76,7 +125,8 @@
             "defaultValue": "",
             "helpMarkDown": "JSON file containing user variables.",
             "required": "false",
-            "visibleRule": "command = build || command = validate"
+            "visibleRule": "command = build || command = validate",
+            "groupName": "command"
         },
         {
             "name": "options",
@@ -84,22 +134,25 @@
             "label": "Options",
             "defaultValue": "",
             "helpMarkDown": "Additional options, see [Packer Commands (CLI)](https://www.packer.io/docs/commands/index.html) for more information.",
-            "required": "false"
+            "required": "false",
+            "groupName": "command"
         }
     ],
-    "OutputVariables": [{
-        "name" : "OSDiskUri",
-        "description" : "The captured VHD's URL (see [VHD or Managed Image](https://www.packer.io/docs/builders/azure.html#vhd-or-managed-image))."
-    },
-    {
-        "name" : "OSDiskUriReadOnlySas"
-    },
-    {
-        "name" : "TemplateUri"
-    },
-    {
-        "name" : "TemplateUriReadOnlySas"
-    }],
+    "OutputVariables": [
+        {
+            "name": "OSDiskUri",
+            "description": "The captured VHD's URL (see [VHD or Managed Image](https://www.packer.io/docs/builders/azure.html#vhd-or-managed-image))."
+        },
+        {
+            "name": "OSDiskUriReadOnlySas"
+        },
+        {
+            "name": "TemplateUri"
+        },
+        {
+            "name": "TemplateUriReadOnlySas"
+        }
+    ],
     "execution": {
         "Node": {
             "target": "src/packer.js",
