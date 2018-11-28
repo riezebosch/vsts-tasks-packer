@@ -1,9 +1,9 @@
 import * as task from '../src/packer'
-import { expect } from 'chai';
 import * as sinon from 'sinon';
 import * as lib from 'vsts-task-lib';
 import * as libext from '../src/tasklibext'
 import * as uuid from 'uuid';
+import { ToolRunner } from 'vsts-task-lib/toolrunner';
 
 describe('packer', () => {
     let input = sinon.stub(lib, 'getInput');
@@ -24,7 +24,7 @@ describe('packer', () => {
         exec: () => {}
     };
 
-    sinon.stub(lib, 'tool').withArgs('packer').returns(tool);
+    sinon.stub(lib, 'tool').withArgs('packer').returns(<ToolRunner><Object>tool);
 
     beforeEach(() => {
         sinon.resetHistory();
