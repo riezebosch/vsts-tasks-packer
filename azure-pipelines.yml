@@ -1,0 +1,26 @@
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '8.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+- task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
+  inputs:
+    outputPath: $(build.stagingDirectory)
+    extensionVersion: 0.9.${Build.BuildId}
+    extensionVisibility: private_preview
+    updateTasksVersion: true
+    updateTasksVersionType: patch
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: $(Build.StagingDirectory)
+    ArtifactName: extension

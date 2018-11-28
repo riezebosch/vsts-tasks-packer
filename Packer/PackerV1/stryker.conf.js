@@ -7,6 +7,11 @@ module.exports = function(config) {
     testFramework: "mocha",
     coverageAnalysis: "perTest",
     tsconfigFile: "tsconfig.json",
-    mutate: ["src/**/*.ts"]
+    mutate: ["src/**/*.ts"],
+    thresholds: {
+      break: 98,
+      high: 100, 
+      low: 100
+    }
   });
 };

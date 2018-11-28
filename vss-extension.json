@@ -12,7 +12,7 @@
     ],    
     "description": "Build Automated Machine Images using Packer",
     "categories": [
-        "Build and release"
+        "Azure Pipelines"
     ],
     "icons": {
         "default": "images/extension-icon.png"
@@ -54,7 +54,7 @@
                 "ms.vss-distributed-task.tasks"
             ],
             "properties": {
-                "name": "packer"
+                "name": "Packer"
             }
         },
         {

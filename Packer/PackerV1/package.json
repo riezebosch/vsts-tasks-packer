@@ -5,11 +5,10 @@
   "main": "src/index.js",
   "scripts": {
     "build": "tsc -p .",
-    "build:prod": "npm i && npm run build && npm prune --production && npm dedupe",
+    "build:prod": "npm i && npm run build && npm run test && npm run stryker -- --reporters clear-text,progress,baseline && npm prune --production && npm dedupe",
     "pretest": "npm run build",
     "test": "mocha --recursive",
-    "upload": "npm run build:prod && tfx build tasks upload --task-path .",
-    "delete": "tfx build tasks delete --task-id b3c6bb07-1292-44e7-9ec9-b211fc98b6d2"
+    "stryker": "stryker run stryker.conf.js"
   },
   "keywords": [
     "packer",
