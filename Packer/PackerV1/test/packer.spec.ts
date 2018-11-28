@@ -167,6 +167,13 @@ describe('packer', () => {
         sinon.assert.calledWith(tool.arg, '-color=false');
     });
 
+    it('should only disable color for build command', async () => {
+        input.withArgs('command').returns('inspect');
+
+        await task.run();
+        sinon.assert.neverCalledWith(tool.arg, '-color=false');
+    });
+
     async function checkVariable(variable: string) {
         let data = uuid.v4();
         tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => _.listener(`${variable}: ${data}`));

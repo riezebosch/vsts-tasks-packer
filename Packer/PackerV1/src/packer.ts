@@ -7,7 +7,7 @@ export async function run(): Promise<any> {
     let packer = tl.tool('packer');
 
     addListeners(packer);
-    addCommand(packer);
+    const command = addCommand(packer);
     addAwsVariables(packer);
     addAzureVariables(packer);
     addForce(packer);
@@ -15,13 +15,16 @@ export async function run(): Promise<any> {
     addVariablesFile(packer);
     addOptions(packer);
     addTemplate(packer);
-    addColor(packer);
+    addColor(packer, command);
 
     await packer.exec();
 }
 
-export function addCommand(packer: ToolRunner) {
-    packer.arg(tl.getInput('command'));
+export function addCommand(packer: ToolRunner): string {
+    const command = tl.getInput('command');
+    packer.arg(command);
+
+    return command;
 }
 
 export function addForce(packer: ToolRunner) {
@@ -78,8 +81,10 @@ export function addAzureVariables(packer: ToolRunner) {
     }
 }
 
-function addColor(packer: ToolRunner) {
-    packer.arg('-color=false');
+function addColor(packer: ToolRunner, command: string) {
+    if (command == 'build') {
+        packer.arg('-color=false');
+    }
 }
 
 export function addListeners(tool: EventEmitter) {
