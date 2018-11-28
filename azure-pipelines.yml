@@ -15,7 +15,7 @@ steps:
 - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
   inputs:
     outputPath: $(build.stagingDirectory)
-    extensionVersion: 0.9.${Build.BuildId}
+    extensionVersion: 0.9.$(Build.BuildId)
     extensionVisibility: private_preview
     updateTasksVersion: true
     updateTasksVersionType: patch

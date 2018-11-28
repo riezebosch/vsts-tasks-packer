@@ -6,3 +6,4 @@ node_modules/
 *.vsix
 .taskkey
 .DS_Store
+reports/

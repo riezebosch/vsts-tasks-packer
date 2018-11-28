@@ -1,9 +1,11 @@
-import * as task from '../src/packer'
 import * as sinon from 'sinon';
 import * as lib from 'vsts-task-lib';
 import * as libext from '../src/tasklibext'
 import * as uuid from 'uuid';
 import { ToolRunner } from 'vsts-task-lib/toolrunner';
+
+sinon.stub(lib, 'setResult'); // prevent from failing the build & test task on the Azure Pipeline
+import * as task from '../src/packer';
 
 describe('packer', () => {
     let input = sinon.stub(lib, 'getInput');
