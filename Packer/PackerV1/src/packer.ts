@@ -15,6 +15,7 @@ export async function run(): Promise<any> {
     addVariablesFile(packer);
     addOptions(packer);
     addTemplate(packer);
+    addColor(packer);
 
     await packer.exec();
 }
@@ -75,6 +76,10 @@ export function addAzureVariables(packer: ToolRunner) {
         let tenant_id = tl.getEndpointAuthorizationParameter(id, 'tenantid', false);
         packer.arg(['-var', `tenant_id=${tenant_id}`]);
     }
+}
+
+function addColor(packer: ToolRunner) {
+    packer.arg('-color=false');
 }
 
 export function addListeners(tool: EventEmitter) {

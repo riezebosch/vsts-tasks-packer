@@ -162,6 +162,11 @@ describe('packer', () => {
         sinon.assert.notCalled(setOutVariable);
     });
 
+    it('should disable color by default', async () => {
+        await task.run();
+        sinon.assert.calledWith(tool.arg, '-color=false');
+    });
+
     async function checkVariable(variable: string) {
         let data = uuid.v4();
         tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => _.listener(`${variable}: ${data}`));
