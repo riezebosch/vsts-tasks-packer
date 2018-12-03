@@ -5,6 +5,11 @@ Install and execute [packer](https://packer.io) as part of your build & release 
 
 ## Release Notes
 
+> **03-12-2018**
+> * Packer@V1 out of preview
+> * Disable color for `packer build` by default with `-color=false` switch
+> * Default version for packer tool updated: `1.3.2`
+> 
 > **23-10-2018**
 > * Support for AWS in V1-peview.
 > * Default version for packer tool updated: `1.3.1`
