@@ -15,7 +15,7 @@
         "Minor": 185,
         "Patch": 0
     },
-    "preview": true,
+    "preview": false,
     "satisfies": [],
     "demands": [
         "Packer"
