@@ -6,6 +6,7 @@ import { ToolRunner } from 'vsts-task-lib/toolrunner';
 
 sinon.stub(lib, 'setResult'); // prevent from failing the build & test task on the Azure Pipeline
 import * as task from '../src/packer';
+import { expect } from 'chai';
 
 describe('packer', () => {
     let input = sinon.stub(lib, 'getInput');
@@ -122,6 +123,18 @@ describe('packer', () => {
         await task.run();
         sinon.assert.called(stub);
         sinon.assert.calledWith(tool.arg, 'my-custom-packer-template.json')
+    });
+
+    it('should add template last', async () => {
+        input.withArgs('command').returns('build');
+        pathInput.withArgs('templatePath', true, true).returns('my-custom-packer-template.json');
+        let arg = tool.arg.withArgs('my-custom-packer-template.json');
+        
+        await task.run();
+        
+        expect(tool.arg.calledAfter(arg)).to.be.false;
+        // let calls = tool.arg.getCalls();
+        // expect(calls[calls.length -1].args).to.eq(['my-custom-packer-template.json']);
     });
 
     it('should add variables', async () => {

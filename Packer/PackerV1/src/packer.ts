@@ -14,8 +14,8 @@ export async function run(): Promise<any> {
     addVariables(packer);
     addVariablesFile(packer);
     addOptions(packer);
-    addTemplate(packer);
     addColor(packer, command);
+    addTemplate(packer);
 
     await packer.exec();
 }
