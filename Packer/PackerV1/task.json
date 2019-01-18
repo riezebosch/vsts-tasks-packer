@@ -155,6 +155,9 @@
         },
         {
             "name": "TemplateUriReadOnlySas"
+        },
+        {
+            "name": "DeploymentName"
         }
     ],
     "execution": {

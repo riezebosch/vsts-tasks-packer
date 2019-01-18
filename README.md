@@ -5,6 +5,10 @@ Install and execute [packer](https://packer.io) as part of your build & release 
 
 ## Release Notes
 
+> **18-01-2019**
+> * Output variable for `DeploymentName` (so you can cleanup resources when Packer fails to do so).
+> * Default version for packer tool updated: `1.3.3`
+>
 > **03-12-2018**
 > * Packer@V1 out of preview
 > * Disable color for `packer build` by default with `-color=false` switch
@@ -54,9 +58,9 @@ resources:
 - repo: self
 steps:
 - task: riezebosch.Packer.PackerTool.PackerTool@0
-  displayName: 'Use Packer 1.3.1'
+  displayName: 'Use Packer 1.3.3'
   inputs:
-    version: 1.3.1
+    version: 1.3.3
 
 - task: Packer@1
   displayName: 'Packer build'
@@ -82,3 +86,4 @@ See [Packer Commands (CLI)](https://www.packer.io/docs/commands/index.html) for 
 * OSDiskUriReadOnlySas
 * TemplateUri
 * TemplateUriReadOnlySas
+* DeploymentName
