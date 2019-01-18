@@ -169,6 +169,15 @@ describe('packer', () => {
         await checkVariable('TemplateUriReadOnlySas');
     });
 
+    it('should output the DeploymentName', async () => {
+        let data = uuid.v4();
+        tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => _.listener(`==> azure-arm:  -> DeploymentName    : '${data}'`));
+
+        await task.run();
+        sinon.assert.calledWithMatch(setOutVariable, 'DeploymentName', data);
+
+    });
+
     it('should only outputs wellknown variables', async () => {
         let data = uuid.v4();
         tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => _.listener(`asdf: ${data}`));

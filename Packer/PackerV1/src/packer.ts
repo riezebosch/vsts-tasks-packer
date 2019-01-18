@@ -95,6 +95,11 @@ export function addListeners(tool: EventEmitter) {
         if (match) {
             tlext.setVariable(match[1], match[2]);
         }
+
+        match = m.match(/ -> (DeploymentName)    : '(.*)'/);
+        if (match) {
+            tlext.setVariable(match[1], match[2])
+        }
     }
 }
 
