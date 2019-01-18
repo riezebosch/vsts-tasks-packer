@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/manuel/packer-tasks/_apis/build/status/riezebosch.vsts-tasks-packer?branchName=master)](https://dev.azure.com/manuel/packer-tasks/_build/latest?definitionId=27?branchName=master)
+
 # Packer
 
 Install and execute [packer](https://packer.io) as part of your build & release pipelines.
