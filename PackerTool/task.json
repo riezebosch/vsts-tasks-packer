@@ -22,7 +22,7 @@
             "name": "version",
             "type": "string",
             "label": "Version",
-            "defaultValue": "1.3.3",
+            "defaultValue": "1.3.4",
             "required": true,
             "helpMarkDown": "Version to get. See [releases](https://releases.hashicorp.com/packer/) for available versions."
         }

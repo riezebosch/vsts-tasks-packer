@@ -7,6 +7,10 @@ Install and execute [packer](https://packer.io) as part of your build & release 
 
 ## Release Notes
 
+> **02-02-2019**
+> * Download `386` version on a `ia32` architecture system
+> * Default version for packer tool updated: `1.3.4` (should auto resolve that sometime)
+> 
 > **18-01-2019**
 > * Output variable for `DeploymentName` (so you can cleanup resources when Packer fails to do so).
 > * Default version for packer tool updated: `1.3.3`
