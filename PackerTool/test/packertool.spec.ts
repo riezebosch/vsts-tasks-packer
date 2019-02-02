@@ -21,4 +21,8 @@ describe('prepare download link', () => {
     it('maps arch x32 to 386 for some reason', () => {
         expect(tool('1.2.3', 'linux', 'x32')).to.eq('https://releases.hashicorp.com/packer/1.2.3/packer_1.2.3_linux_386.zip')
     });
+
+    it ('maps ia32 to x86 for windows', () => {
+        expect(tool('1.2.3', 'windows', 'ia32')).to.eq('https://releases.hashicorp.com/packer/1.2.3/packer_1.2.3_windows_386.zip')
+    });
 });
