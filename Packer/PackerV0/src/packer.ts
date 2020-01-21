@@ -1,6 +1,6 @@
-import * as tl from 'vsts-task-lib';
+import * as tl from 'azure-pipelines-task-lib';
 import * as tlext from './tasklibext'
-import { ToolRunner } from 'vsts-task-lib/toolrunner';
+import { ToolRunner } from 'azure-pipelines-task-lib/toolrunner';
 import { EventEmitter } from 'events';
 
 async function run(): Promise<any> {

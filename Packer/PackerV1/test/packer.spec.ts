@@ -1,8 +1,8 @@
 import * as sinon from 'sinon';
-import * as lib from 'vsts-task-lib';
+import * as lib from 'azure-pipelines-task-lib';
 import * as libext from '../src/tasklibext'
 import * as uuid from 'uuid';
-import { ToolRunner } from 'vsts-task-lib/toolrunner';
+import { ToolRunner } from 'azure-pipelines-task-lib/toolrunner';
 
 sinon.stub(lib, 'setResult'); // prevent from failing the build & test task on the Azure Pipeline
 import * as task from '../src/packer';

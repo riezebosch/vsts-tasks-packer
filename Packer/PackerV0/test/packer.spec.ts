@@ -1,7 +1,7 @@
 import * as packer from '../src/packer'
 import { expect } from 'chai';
 import * as sinon from 'sinon';
-import * as tr from 'vsts-task-lib/toolrunner'
+import * as tr from 'azure-pipelines-task-lib/toolrunner'
 
 describe('packer', () => {
     let events: string[];

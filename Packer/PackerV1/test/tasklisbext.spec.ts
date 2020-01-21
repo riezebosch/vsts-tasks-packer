@@ -1,6 +1,6 @@
 import * as tlext from '../src/tasklibext'
 import * as sinon from 'sinon';
-import * as internal from 'vsts-task-lib/internal';
+import * as internal from 'azure-pipelines-task-lib/internal';
 import * as stream from 'memory-streams';
 import os = require('os');
 import { expect } from 'chai';
