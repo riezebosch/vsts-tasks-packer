@@ -12,7 +12,7 @@
     "author": "Manuel Riezebosch",
     "version": {
         "Major": 0,
-        "Minor": 145,
+        "Minor": 146,
         "Patch": 0
     },
     "satisfies": ["Packer"],
@@ -22,9 +22,9 @@
             "name": "version",
             "type": "string",
             "label": "Version",
-            "defaultValue": "1.3.4",
-            "required": true,
-            "helpMarkDown": "Version to get. See [releases](https://releases.hashicorp.com/packer/) for available versions."
+            "defaultValue": "",
+            "required": false,
+            "helpMarkDown": "See [releases](https://releases.hashicorp.com/packer/) for available versions, empty for latest"
         }
     ],
     "execution": {

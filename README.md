@@ -7,6 +7,9 @@ Install and execute [packer](https://packer.io) as part of your build & release 
 
 ## Release Notes
 
+> **22-01-2020**
+> * PackerTool: version optional, download latest version when not specified
+>
 > **02-02-2019**
 > * Download `386` version on a `ia32` architecture system
 > * Default version for packer tool updated: `1.3.4` (should auto resolve that sometime)
@@ -64,10 +67,6 @@ resources:
 - repo: self
 steps:
 - task: riezebosch.Packer.PackerTool.PackerTool@0
-  displayName: 'Use Packer 1.3.3'
-  inputs:
-    version: 1.3.3
-
 - task: Packer@1
   displayName: 'Packer build'
   inputs:

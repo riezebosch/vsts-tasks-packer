@@ -1,10 +1,11 @@
 import * as taskLib from 'vsts-task-lib/task';
 import * as toolLib from 'vsts-task-tool-lib/tool';
 import * as os from 'os';
+import * as fetch from 'node-fetch';
 
 async function run() {
     try {
-        let version = taskLib.getInput('version', true);
+        let version = taskLib.getInput('version', false) || await getVersion();
         await getNode(version);
     }
     catch (error) {
@@ -25,7 +26,7 @@ async function acquireNode(version: string): Promise<string> {
     version = toolLib.cleanVersion(version);
     let downloadUrl = downloadLink(version, os.platform(), os.arch())
 
-    let downloadPath = await toolLib.downloadTool(downloadUrl);
+    let downloadPath = await toolLib.downloadTool(await downloadUrl);
     let extPath: string = await toolLib.extractZip(downloadPath);
 
     return await toolLib.cacheDir(extPath, 'packer', version);
@@ -33,16 +34,34 @@ async function acquireNode(version: string): Promise<string> {
 
 run();
 
-export default function downloadLink(version: string, os: string, arch: string): string {
-    if (os == 'win32') {
-        os = 'windows';
-    }
-
-    if (arch == 'x32' || arch == 'ia32') {
-        arch = '386';
-    } else if (arch == 'x64') {
-        arch = 'amd64';
-    }
+export async function downloadLink(version: string, os: string, arch: string): Promise<string> {
+    os = getOs(os);
+    arch = getArch(arch);
 
     return `https://releases.hashicorp.com/packer/${version}/packer_${version}_${os}_${arch}.zip`;
+}
+
+function getArch(arch: string) {
+    if (arch == 'x32' || arch == 'ia32') {
+        return '386';
+    }
+    
+    if (arch == 'x64') {
+        return 'amd64';
+    }
+
+    return arch;
+}
+
+function getOs(os: string) {
+    if (os == 'win32') {
+        return 'windows';
+    }
+
+    return os;
+}
+
+export async function getVersion(): Promise<string> {
+    const res = await fetch.default('https://checkpoint-api.hashicorp.com/v1/check/packer');
+    return (await res.json()).current_version;
 }
