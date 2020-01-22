@@ -1,9 +1,10 @@
 module.exports = function(config) {
   config.set({
-    testRunner: "mocha",
     mutator: "typescript",
+    packageManager: "npm",
+    reporters: ["clear-text", "progress", "dashboard"],
+    testRunner: "mocha",
     transpilers: ["typescript"],
-    reporter: ["html", "clear-text", "progress", "baseline"],
     testFramework: "mocha",
     coverageAnalysis: "perTest",
     tsconfigFile: "tsconfig.json",
