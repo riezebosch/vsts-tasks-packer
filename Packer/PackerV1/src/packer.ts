@@ -91,7 +91,7 @@ export function addListeners(tool: EventEmitter) {
     tool.addListener('stdout', _ => extractVariable(_.toString()));
 
     function extractVariable(m: string) {
-        let match = m.match(/(OSDiskUri|OSDiskUriReadOnlySas|TemplateUri|TemplateUriReadOnlySas|AMI): (.*)/);
+        let match = m.match(/(OSDiskUri|OSDiskUriReadOnlySas|TemplateUri|TemplateUriReadOnlySas|AMI|ManagedImageId|ManagedImageSharedImageGalleryId): (.*)/);
         if (match) {
             tlext.setVariable(match[1], match[2]);
         }

@@ -158,6 +158,12 @@
         },
         {
             "name": "DeploymentName"
+        },
+        {
+            "name": "ManagedImageId"
+        },
+        {
+            "name": "ManagedImageSharedImageGalleryId"
         }
     ],
     "execution": {
