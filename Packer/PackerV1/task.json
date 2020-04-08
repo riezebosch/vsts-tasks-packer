@@ -163,6 +163,15 @@
             "name": "ManagedImageId"
         },
         {
+            "name": "ManagedImageName"
+        },
+        {
+            "name": "ManagedImageResourceGroupName"
+        },
+        {
+            "name": "ManagedImageLocation"
+        },
+        {
             "name": "ManagedImageSharedImageGalleryId"
         }
     ],
