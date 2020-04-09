@@ -8,7 +8,7 @@
     "build:prod": "npm i && npm run build && npm run test && npm run stryker -- --reporters clear-text,progress && npm prune --production && npm dedupe",
     "pretest": "npm run build",
     "test": "mocha --recursive",
-    "stryker": "stryker run stryker.conf.js"
+    "stryker": "stryker run"
   },
   "keywords": [
     "packer",
@@ -21,20 +21,19 @@
     "azure-pipelines-task-lib": "^2.9.3"
   },
   "devDependencies": {
-    "@stryker-mutator/core": "^2.5.0",
-    "@stryker-mutator/html-reporter": "^2.5.0",
-    "@stryker-mutator/mocha-framework": "^2.5.0",
-    "@stryker-mutator/mocha-runner": "^2.5.0",
-    "@stryker-mutator/typescript": "^2.5.0",
-    "@types/chai": "^4.2.7",
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^13.1.8",
-    "@types/sinon": "^7.5.1",
+    "@stryker-mutator/core": "^3.1.0",
+    "@stryker-mutator/mocha-framework": "^3.1.0",
+    "@stryker-mutator/mocha-runner": "^3.1.0",
+    "@stryker-mutator/typescript": "^3.1.0",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.1",
+    "@types/sinon": "^9.0.0",
     "chai": "^4.2.0",
     "memory-streams": "^0.1.3",
-    "mocha": "^7.0.0",
-    "sinon": "^8.1.0",
-    "typescript": "^3.7.5",
-    "uuid": "^3.4.0"
+    "mocha": "^7.1.1",
+    "sinon": "^9.0.2",
+    "typescript": "^3.8.3",
+    "uuid": "^7.0.3"
   }
 }
