@@ -31,6 +31,7 @@ describe('packer', () => {
 
     beforeEach(() => {
         sinon.resetHistory();
+        listeners = [];
     });
 
     after(() => {
@@ -169,13 +170,12 @@ describe('packer', () => {
         await checkVariable('TemplateUriReadOnlySas');
     });
 
-    it('should output the DeploymentName', async () => {
-        let data = uuid.v4();
+    it('should output the DeploymentName and strip off quotes', async () => {
+        let data: string = uuid.v4();
         tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => _.listener(`==> azure-arm:  -> DeploymentName    : '${data}'`));
 
         await task.run();
-        sinon.assert.calledWithMatch(setOutVariable, 'DeploymentName', data);
-
+        sinon.assert.calledWith(setOutVariable, 'DeploymentName', data);
     });
 
     it('should only outputs wellknown variables', async () => {
@@ -184,6 +184,30 @@ describe('packer', () => {
 
         await task.run();
         sinon.assert.notCalled(setOutVariable);
+    });
+
+    it('should also match when delivered in chunks', async () => {
+        let data = uuid.v4();
+        tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => {
+            _.listener('TemplateUri');
+            _.listener('ReadOnlySas:');
+            _.listener(data)
+        });
+
+        await task.run();
+        sinon.assert.calledWith(setOutVariable, 'TemplateUriReadOnlySas', data);
+
+    });
+
+    it('should only keep chunks until newline', async () => {
+        let data = uuid.v4();
+        tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => {
+            _.listener(`TemplateUriReadOnlySas: {data}\n`);
+            _.listener('bogus');
+        });
+
+        await task.run();
+        sinon.assert.calledOnce(setOutVariable);
     });
 
     it('should disable color by default', async () => {
@@ -203,6 +227,6 @@ describe('packer', () => {
         tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => _.listener(`${variable}: ${data}`));
 
         await task.run();
-        sinon.assert.calledWithMatch(setOutVariable, variable, data);
+        sinon.assert.calledWith(setOutVariable, variable, data);
     }
 });

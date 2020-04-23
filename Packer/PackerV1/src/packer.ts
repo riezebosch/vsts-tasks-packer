@@ -90,16 +90,15 @@ function addColor(packer: ToolRunner, command: string) {
 export function addListeners(tool: EventEmitter) {
     tool.addListener('stdout', _ => extractVariable(_.toString()));
 
+    let chunk = "";
     function extractVariable(m: string) {
-        let match = m.match(/(OSDiskUri|OSDiskUriReadOnlySas|TemplateUri|TemplateUriReadOnlySas|AMI|ManagedImageId|ManagedImageName|ManagedImageResourceGroupName|ManagedImageLocation|ManagedImageSharedImageGalleryId): (.*)/);
+        chunk += m;
+        let match = chunk.match(/(OSDiskUri|OSDiskUriReadOnlySas|TemplateUri|TemplateUriReadOnlySas|AMI|ManagedImageId|ManagedImageName|ManagedImageResourceGroupName|ManagedImageLocation|ManagedImageSharedImageGalleryId|DeploymentName)\s*:\s*('?)(.*)(\2)/);
         if (match) {
-            tlext.setVariable(match[1], match[2]);
+            tlext.setVariable(match[1], match[3]);
         }
 
-        match = m.match(/ -> (DeploymentName)    : '(.*)'/);
-        if (match) {
-            tlext.setVariable(match[1], match[2])
-        }
+        chunk = chunk.substring(chunk.indexOf('\n') + 1);
     }
 }
 
