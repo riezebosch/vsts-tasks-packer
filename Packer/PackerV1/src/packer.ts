@@ -91,14 +91,17 @@ export function addListeners(tool: EventEmitter) {
     tool.addListener('stdout', _ => extractVariable(_.toString()));
 
     let chunk = "";
+    const pattern = /(OSDiskUri|OSDiskUriReadOnlySas|TemplateUri|TemplateUriReadOnlySas|AMI|ManagedImageId|ManagedImageName|ManagedImageResourceGroupName|ManagedImageLocation|ManagedImageSharedImageGalleryId|DeploymentName)\s*:\s*('?)(.*)\2/g;
+    
     function extractVariable(m: string) {
         chunk += m;
-        let match = chunk.match(/(OSDiskUri|OSDiskUriReadOnlySas|TemplateUri|TemplateUriReadOnlySas|AMI|ManagedImageId|ManagedImageName|ManagedImageResourceGroupName|ManagedImageLocation|ManagedImageSharedImageGalleryId|DeploymentName)\s*:\s*('?)(.*)(\2)/);
-        if (match) {
+        let match: RegExpExecArray;
+
+        while ((match = pattern.exec(chunk)) !== null) {
             tlext.setVariable(match[1], match[3]);
         }
-
-        chunk = chunk.substring(chunk.indexOf('\n') + 1);
+        
+        chunk = chunk.substring(chunk.lastIndexOf('\n') + 1);
     }
 }
 

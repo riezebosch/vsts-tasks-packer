@@ -210,6 +210,17 @@ describe('packer', () => {
         sinon.assert.calledOnce(setOutVariable);
     });
 
+    it('also match multiple when part of single chunk', async () => {
+        let data = uuid.v4();
+        tool.exec = () => listeners.filter(_ => _.event == 'stdout').forEach(_ => {
+            _.listener(`TemplateUriReadOnlySas: ${data}\nManagedImageLocation: ${data}`);
+        });
+
+        await task.run();
+        sinon.assert.calledWith(setOutVariable, 'TemplateUriReadOnlySas', data);
+        sinon.assert.calledWith(setOutVariable, 'ManagedImageLocation', data);
+    });
+
     it('should disable color by default', async () => {
         await task.run();
         sinon.assert.calledWith(tool.arg, '-color=false');
