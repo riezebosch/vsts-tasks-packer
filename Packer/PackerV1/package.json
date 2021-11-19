@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "fs": "0.0.1-security",
-    "azure-pipelines-task-lib": "^2.9.3"
+    "azure-pipelines-task-lib": "^3.7.1"
   },
   "devDependencies": {
     "@stryker-mutator/core": "^3.1.0",
