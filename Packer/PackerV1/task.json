@@ -176,7 +176,7 @@
         }
     ],
     "execution": {
-        "Node": {
+        "Node10": {
             "target": "src/packer.js",
             "argumentFormat": ""
         }
