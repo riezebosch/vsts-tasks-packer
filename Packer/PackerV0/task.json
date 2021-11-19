@@ -42,11 +42,11 @@
                 "EditableOptions": "True"
             },
             "options": {
-                "build": "build", 
+                "build": "build",
                 "fix": "fix",
                 "inspect": "inspect",
                 "push": "push",
-                "validate": "validate", 
+                "validate": "validate",
                 "version": "version"
             },
             "defaultValue": "build"
@@ -101,7 +101,7 @@
         "name" : "TemplateUriReadOnlySas"
     }],
     "execution": {
-        "Node": {
+        "Node10": {
             "target": "src/packer.js",
             "argumentFormat": ""
         }
