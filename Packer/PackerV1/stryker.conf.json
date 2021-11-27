@@ -1,6 +1,6 @@
 {
-  "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker/master/packages/api/schema/stryker-core.json",
-  "mutator": "typescript",
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "_comment": "This config was generated using 'stryker init'. Please take a look at: https://stryker-mutator.io/docs/stryker-js/configuration/ for more information",
   "packageManager": "npm",
   "reporters": [
     "html",
@@ -8,13 +8,9 @@
     "progress"
   ],
   "testRunner": "mocha",
-  "transpilers": [
-    "typescript"
-  ],
-  "testFramework": "mocha",
   "coverageAnalysis": "perTest",
-  "tsconfigFile": "tsconfig.json",
+  "buildCommand": "npm run build",
   "mutate": [
-    "src/**/*.ts"
+    "src/*.ts"
   ]
 }
