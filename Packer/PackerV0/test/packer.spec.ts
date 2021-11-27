@@ -1,7 +1,10 @@
 import * as packer from '../src/packer'
 import { expect } from 'chai';
 import * as sinon from 'sinon';
+import * as lib from 'azure-pipelines-task-lib';
 import * as tr from 'azure-pipelines-task-lib/toolrunner'
+
+sinon.stub(lib, 'setResult'); // prevent from failing the build & test task on the Azure Pipeline
 
 describe('packer', () => {
     let events: string[];
