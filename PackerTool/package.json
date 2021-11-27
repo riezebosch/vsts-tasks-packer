@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "tsc -p .",
-    "build:prod": "npm i && npm run build && npm prune --production && npm dedupe",
+    "build:prod": "npm i && npm run build && npm prune --production && npm dedupe --production",
     "pretest": "npm run build",
     "test": "mocha --recursive",
     "upload": "npm run build:prod && tfx build tasks upload --task-path ."
@@ -17,15 +17,15 @@
   "author": "Manuel Riezebosch",
   "license": "ISC",
   "dependencies": {
-    "node-fetch": "^2.6.0",
-    "azure-pipelines-tool-lib": "^0.12.0"
+    "node-fetch": "^2",
+    "azure-pipelines-tool-lib": "^0.13.3"
   },
   "devDependencies": {
-    "@types/mocha": "^7.0.2",
-    "@types/node": "^13.11.1",
-    "@types/node-fetch": "^2.5.5",
-    "chai": "^4.2.0",
-    "mocha": "^7.1.1",
-    "typescript": "^3.8.3"
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.10",
+    "@types/node-fetch": "^2",
+    "chai": "^4.3.4",
+    "mocha": "^9.1.3",
+    "typescript": "^4.5.2"
   }
 }
