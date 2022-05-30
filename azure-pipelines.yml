@@ -12,7 +12,10 @@ steps:
     npm run build
   displayName: 'npm install and build'
 
-- task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
+- task: TfxInstaller@3
+  inputs:
+    version: 'v0.11.x'
+- task: PackageAzureDevOpsExtension@3
   inputs:
     outputPath: $(build.stagingDirectory)
     extensionVersion: 0.9.$(Build.BuildId)
