@@ -94,6 +94,7 @@
             "options": {
                 "build": "build",
                 "fix": "fix",
+                "init": "init",
                 "inspect": "inspect",
                 "push": "push",
                 "validate": "validate",
