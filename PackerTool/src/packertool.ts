@@ -1,7 +1,7 @@
 import * as taskLib from 'azure-pipelines-task-lib/task';
 import * as toolLib from 'azure-pipelines-tool-lib/tool';
 import * as os from 'os';
-import * as fetch from 'node-fetch';
+import fetch from 'cross-fetch';
 
 async function run() {
     try {
@@ -45,7 +45,7 @@ function getArch(arch: string) {
     if (arch == 'x32' || arch == 'ia32') {
         return '386';
     }
-    
+
     if (arch == 'x64') {
         return 'amd64';
     }
@@ -61,7 +61,7 @@ function getOs(os: string) {
     return os;
 }
 
-export async function getVersion(): Promise<string> {
-    const res = await fetch.default('https://checkpoint-api.hashicorp.com/v1/check/packer');
-    return (await res.json()).current_version;
-}
+export const getVersion = () =>
+    fetch('https://checkpoint-api.hashicorp.com/v1/check/packer')
+        .then(r => r.json() as any)
+        .then(r => r.current_version);
