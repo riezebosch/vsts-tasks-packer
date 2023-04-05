@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "build": "tsc -p .",
-    "build:prod": "npm i && npm run build && npm run test && npm run stryker -- --reporters clear-text,progress && npm prune --production",
+    "build:prod": "npm i && npm run build && npm run test && npm run stryker -- --reporters clear-text,progress --logLevel off && npm prune --production",
     "pretest": "npm run build",
     "test": "mocha --recursive",
     "stryker": "stryker run"
