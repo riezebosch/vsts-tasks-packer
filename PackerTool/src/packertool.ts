@@ -61,7 +61,7 @@ function getOs(os: string) {
     return os;
 }
 
-export const getVersion = () =>
-    fetch('https://checkpoint-api.hashicorp.com/v1/check/packer')
-        .then(r => r.json() as any)
-        .then(r => r.current_version);
+export async function getVersion(): Promise<string> {
+    const res = await fetch('https://checkpoint-api.hashicorp.com/v1/check/packer');
+    return (await res.json()).current_version;
+}
