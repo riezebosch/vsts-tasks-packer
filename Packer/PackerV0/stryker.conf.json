@@ -7,6 +7,11 @@
     "clear-text",
     "progress"
   ],
+  "clearTextReporter": {
+    "allowColor": false,
+    "allowEmojis": true
+  },
+  "allowConsoleColors": false,
   "testRunner": "mocha",
   "coverageAnalysis": "perTest",
   "buildCommand": "npm run build",
