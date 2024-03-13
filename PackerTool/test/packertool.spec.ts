@@ -30,7 +30,7 @@ describe('PackerTool', () => {
 
     describe('getVersion', () => {
         it('latest', async () => {
-            const pattern = new RegExp('\\d.\\d.\\d')
+            const pattern = new RegExp(/\d+\.\d+\.\d+/)
             expect(await getVersion()).to.match(pattern);
         });
     });
