@@ -8,7 +8,8 @@
     "build:prod": "npm i && npm run build && npm prune --production && npm dedupe --production",
     "pretest": "npm run build",
     "test": "mocha --recursive",
-    "upload": "npm run build:prod && tfx build tasks upload --task-path ."
+    "upload": "npm run build:prod && tfx build tasks upload --task-path .",
+    "postinstall": "patch-package"
   },
   "keywords": [
     "packer",
@@ -26,6 +27,7 @@
     "@types/node-fetch": "^2",
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
+    "patch-package": "^8.0.0",
     "typescript": "^4.9.5"
   }
 }

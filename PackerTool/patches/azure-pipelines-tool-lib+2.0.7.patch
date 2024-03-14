@@ -1,0 +1,16 @@
+diff --git a/node_modules/azure-pipelines-tool-lib/tool.js b/node_modules/azure-pipelines-tool-lib/tool.js
+index 48afe82..911bc89 100644
+--- a/node_modules/azure-pipelines-tool-lib/tool.js
++++ b/node_modules/azure-pipelines-tool-lib/tool.js
+@@ -234,11 +234,6 @@ function downloadTool(url, fileName, handlers, additionalHeaders) {
+                             .on('error', (err) => {
+                             file.end();
+                             reject(err);
+-                        })
+-                            .on('aborted', () => {
+-                            // this block is for Node10 compatibility since it doesn't emit 'error' event after 'aborted' one
+-                            file.end();
+-                            reject(new Error('Aborted'));
+                         })
+                             .pipe(file);
+                     }
