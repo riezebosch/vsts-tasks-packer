@@ -16,9 +16,12 @@
         "Patch": 0
     },
     "satisfies": [],
-    "demands": ["Packer"],
+    "demands": [
+        "Packer"
+    ],
     "instanceNameFormat": "Packer $(command)",
-    "inputs": [{
+    "inputs": [
+        {
             "name": "azureSubscription",
             "type": "connectedService:AzureRM",
             "label": "Azure subscription",
@@ -42,11 +45,11 @@
                 "EditableOptions": "True"
             },
             "options": {
-                "build": "build", 
+                "build": "build",
                 "fix": "fix",
                 "inspect": "inspect",
                 "push": "push",
-                "validate": "validate", 
+                "validate": "validate",
                 "version": "version"
             },
             "defaultValue": "build"
@@ -87,21 +90,27 @@
             "required": "false"
         }
     ],
-    "OutputVariables": [{
-        "name" : "OSDiskUri",
-        "description" : "The captured VHD's URL (see [VHD or Managed Image](https://www.packer.io/docs/builders/azure.html#vhd-or-managed-image))."
-    },
-    {
-        "name" : "OSDiskUriReadOnlySas"
-    },
-    {
-        "name" : "TemplateUri"
-    },
-    {
-        "name" : "TemplateUriReadOnlySas"
-    }],
+    "OutputVariables": [
+        {
+            "name": "OSDiskUri",
+            "description": "The captured VHD's URL (see [VHD or Managed Image](https://www.packer.io/docs/builders/azure.html#vhd-or-managed-image))."
+        },
+        {
+            "name": "OSDiskUriReadOnlySas"
+        },
+        {
+            "name": "TemplateUri"
+        },
+        {
+            "name": "TemplateUriReadOnlySas"
+        }
+    ],
     "execution": {
-        "Node": {
+        "Node10": {
+            "target": "src/packer.js",
+            "argumentFormat": ""
+        },
+        "Node16": {
             "target": "src/packer.js",
             "argumentFormat": ""
         }

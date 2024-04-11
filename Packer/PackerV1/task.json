@@ -180,6 +180,10 @@
         "Node10": {
             "target": "src/packer.js",
             "argumentFormat": ""
+        },
+        "Node16": {
+            "target": "src/packer.js",
+            "argumentFormat": ""
         }
     }
 }

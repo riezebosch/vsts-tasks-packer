@@ -15,10 +15,13 @@
         "Minor": 146,
         "Patch": 0
     },
-    "satisfies": ["Packer"],
+    "satisfies": [
+        "Packer"
+    ],
     "demands": [],
     "instanceNameFormat": "Use Packer $(version)",
-    "inputs": [{
+    "inputs": [
+        {
             "name": "version",
             "type": "string",
             "label": "Version",
@@ -29,6 +32,10 @@
     ],
     "execution": {
         "Node10": {
+            "target": "src/packertool.js",
+            "argumentFormat": ""
+        },
+        "Node16": {
             "target": "src/packertool.js",
             "argumentFormat": ""
         }
