@@ -29,7 +29,7 @@
     "@types/sinon": "^10.0.13",
     "@types/uuid": "^9.0.0",
     "chai": "^4.3.7",
-    "mocha": "^10.2.0",
+    "mocha": "^10.8.2",
     "sinon": "^15.0.1",
     "typescript": "^4.9.5"
   }
