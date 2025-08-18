@@ -184,6 +184,10 @@
         "Node16": {
             "target": "src/packer.js",
             "argumentFormat": ""
+        },
+        "Node20": {
+            "target": "src/packer.js",
+            "argumentFormat": ""
         }
     }
 }
