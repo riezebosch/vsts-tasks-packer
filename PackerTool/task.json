@@ -38,6 +38,10 @@
         "Node16": {
             "target": "src/packertool.js",
             "argumentFormat": ""
+        },
+        "Node20": {
+            "target": "src/packertool.js",
+            "argumentFormat": ""
         }
     },
     "messages": {
