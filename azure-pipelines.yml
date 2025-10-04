@@ -1,29 +1,29 @@
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '16.x'
-  displayName: 'Install Node.js'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "22.x"
+    displayName: "Install Node.js"
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+  - script: |
+      npm install
+      npm run build
+    displayName: "npm install and build"
 
-- task: TfxInstaller@3
-  inputs:
-    version: 'v0.11.x'
-- task: PackageAzureDevOpsExtension@3
-  inputs:
-    outputPath: $(build.stagingDirectory)
-    extensionVersion: 0.9.$(Build.BuildId)
-    extensionVisibility: private_preview
-    updateTasksVersion: true
-    updateTasksVersionType: patch
+  - task: TfxInstaller@3
+    inputs:
+      version: "v0.11.x"
+  - task: PackageAzureDevOpsExtension@3
+    inputs:
+      outputPath: $(build.stagingDirectory)
+      extensionVersion: 0.9.$(Build.BuildId)
+      extensionVisibility: private_preview
+      updateTasksVersion: true
+      updateTasksVersionType: patch
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: $(Build.StagingDirectory)
-    ArtifactName: extension
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: $(Build.StagingDirectory)
+      ArtifactName: extension
