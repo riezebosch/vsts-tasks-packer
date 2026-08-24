@@ -4,10 +4,9 @@
   "description": "Install and execute [packer](https://packer.io) as part of your build & release pipelines.",
   "main": "index.js",
   "scripts": {
-    "build:packerV0": "cd Packer/PackerV0 && npm run build:prod",
     "build:packerV1": "cd Packer/PackerV1 && npm run build:prod",
     "build:tool": "cd PackerTool && npm run build:prod",
-    "build": "npm run build:packerV0 && npm run build:packerV1 && npm run build:tool"
+    "build": "npm run build:packerV1 && npm run build:tool"
   },
   "repository": {
     "type": "git",
