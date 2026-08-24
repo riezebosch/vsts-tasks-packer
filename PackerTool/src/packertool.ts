@@ -9,7 +9,8 @@ async function run() {
         await getNode(version);
     }
     catch (error) {
-        taskLib.setResult(taskLib.TaskResult.Failed, error.message);
+        const message = error instanceof Error ? error.message : String(error);
+        taskLib.setResult(taskLib.TaskResult.Failed, message);
     }
 }
 

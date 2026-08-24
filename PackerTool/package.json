@@ -18,16 +18,18 @@
   "author": "Manuel Riezebosch",
   "license": "ISC",
   "dependencies": {
-    "azure-pipelines-tool-lib": "^2.0.10",
+    "azure-pipelines-tool-lib": "^2.279.0",
     "cross-fetch": "^4.1.0"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.6.2",
+    "@types/node": "^26.2.0",
     "@types/node-fetch": "^2",
-    "chai": "^6.2.0",
-    "mocha": "^11.7.4",
+    "@types/chai": "^4.3.20",
+    "@types/q": "^1.5.8",
+    "chai": "^6.2.2",
+    "mocha": "^11.8.0",
     "patch-package": "^8.0.1",
-    "typescript": "^5.9.3"
+    "typescript": "^7.0.2"
   }
 }
